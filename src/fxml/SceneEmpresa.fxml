@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EmpresaController">
+    <center>
+        <TableView fx:id="tblEmpresa" prefHeight="378.0" prefWidth="400.0">
+            <BorderPane.margin>
+                <Insets />
+            </BorderPane.margin>
+        </TableView>
+    </center>
+    <top>
+        <HBox alignment="CENTER" prefHeight="60.0" BorderPane.alignment="CENTER">
+            <children>
+                <Text fill="#bb4cc3" strokeType="OUTSIDE" strokeWidth="0.0" text="EMPRESAS" wrappingWidth="323.638671875">
+                    <font>
+                        <Font size="30.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets left="10.0" />
+                    </HBox.margin>
+                </Text>
+            </children>
+        </HBox>
+    </top>
+    <right>
+        <VBox spacing="25.0" BorderPane.alignment="CENTER">
+            <children>
+                <JFXTextField fx:id="txtClave" labelFloat="true" prefHeight="26.0" prefWidth="250.0" promptText="CLAVE" unFocusColor="#bf2eba" />
+                <JFXTextField fx:id="txtNombre" labelFloat="true" prefHeight="26.0" prefWidth="250.0" promptText="NOMBRE" unFocusColor="#bf2eba" />
+                <JFXTextField fx:id="txtDescuento" labelFloat="true" prefHeight="26.0" prefWidth="250.0" promptText="DESCUENTO" unFocusColor="#bf2eba" />
+                <JFXTextField fx:id="txtEmail" labelFloat="true" prefHeight="26.0" prefWidth="250.0" promptText="EMAIL" unFocusColor="#bf2eba" />
+                <JFXTextField fx:id="txtRFC" labelFloat="true" prefHeight="26.0" prefWidth="250.0" promptText="RFC" unFocusColor="#bf2eba" />
+                <JFXTextField fx:id="txtTelefono" labelFloat="true" prefHeight="26.0" prefWidth="250.0" promptText="TELEFONO" unFocusColor="#bf2eba" />
+                <JFXComboBox fx:id="cmbStatus" labelFloat="true" minWidth="250.0" promptText="STATUS" />
+                <JFXTextField fx:id="txtObs" alignment="TOP_LEFT" prefHeight="100.0" prefWidth="250.0" promptText="OBSERVACIONES" unFocusColor="#bf2eba" />
+            </children>
+            <BorderPane.margin>
+                <Insets left="10.0" />
+            </BorderPane.margin>
+            <padding>
+                <Insets right="10.0" />
+            </padding>
+        </VBox>
+    </right>
+    <bottom>
+        <HBox alignment="CENTER" prefHeight="50.0">
+            <children>
+                <JFXButton fx:id="btnNew" text="NUEVO" />
+                <JFXButton fx:id="btnAdd" text="ALTAS" />
+                <JFXButton fx:id="btnDelete" text="BAJAS" />
+                <JFXButton fx:id="btnEdit" text="EDITAR" />
+            </children>
+        </HBox>
+    </bottom>
+    <padding>
+        <Insets left="10.0" right="10.0" />
+    </padding>
+</BorderPane>
