@@ -126,7 +126,7 @@
                                 <Tooltip text="Compras" />
                             </tooltip>
                         </JFXButton>
-                        <JFXButton minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="74.0" ripplerFill="WHITE" textFill="WHITE" textOverrun="WORD_ELLIPSIS">
+                        <JFXButton fx:id="btnAlmacen" minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="74.0" ripplerFill="WHITE" textFill="WHITE" textOverrun="WORD_ELLIPSIS">
                             <graphic>
                                 <ImageView accessibleHelp="Almacen" fitHeight="51.0" fitWidth="61.0" pickOnBounds="true" preserveRatio="true">
                                     <image>

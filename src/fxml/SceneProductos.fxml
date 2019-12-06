@@ -1,13 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            prefHeight="400.0" prefWidth="600.0">
-
-</AnchorPane>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ProductController">
+    <top>
+        <HBox alignment="CENTER" prefHeight="100.0">
+            <children>
+                <Text fill="#bb4cc3" strokeType="OUTSIDE" strokeWidth="0.0" text="PRODUCTOS" HBox.hgrow="NEVER">
+                    <font>
+                        <Font size="30.0" />
+                    </font>
+                    <HBox.margin>
+                        <Insets left="10.0" />
+                    </HBox.margin>
+                </Text>
+            </children>
+        </HBox>
+    </top>
+    <bottom>
+        <HBox alignment="CENTER">
+            <children>
+                <JFXButton fx:id="btnNew" text="NUEVO" />
+                <JFXButton fx:id="btnAdd" text="ALTAS" />
+                <JFXButton fx:id="btnDelete" text="BAJAS" />
+                <JFXButton fx:id="btnEdit" text="EDITAR" />
+            </children>
+            <padding>
+                <Insets top="16.0" />
+            </padding>
+        </HBox>
+    </bottom>
+    <center>
+        <TableView fx:id="tblProducts" focusTraversable="false" prefWidth="400.0" BorderPane.alignment="CENTER" />
+    </center>
+    <right>
+        <GridPane hgap="10.0" prefWidth="300.0" BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <JFXTextField fx:id="txtCodigo" labelFloat="true" promptText="CODIGO" GridPane.columnSpan="2" />
+                <JFXComboBox fx:id="cmbTipo" labelFloat="true" minWidth="200.0" promptText="TIPO" GridPane.columnSpan="2" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
+                <JFXComboBox fx:id="cmbMarca" labelFloat="true" minWidth="200.0" promptText="MARCA" GridPane.columnSpan="2" GridPane.rowIndex="2" />
+                <JFXTextField fx:id="txtPrecio" labelFloat="true" promptText="PRECIO" GridPane.rowIndex="3" />
+                <JFXTextField fx:id="txtLinea" labelFloat="true" promptText="LINEA" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <JFXTextField fx:id="txtStock" editable="false" labelFloat="true" promptText="STOCK" GridPane.rowIndex="4" />
+                <JFXTextField fx:id="txtColor" labelFloat="true" promptText="COLOR" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <JFXTextField fx:id="txtDescripcion" labelFloat="true" promptText="DESCRIPCION" GridPane.rowIndex="5" />
+                <JFXComboBox fx:id="cmbGenero" labelFloat="true" prefWidth="150.0" promptText="GENERO" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            </children>
+            <BorderPane.margin>
+                <Insets left="10.0" />
+            </BorderPane.margin>
+        </GridPane>
+    </right>
+    <padding>
+        <Insets bottom="16.0" left="5.0" right="16.0" />
+    </padding>
+</BorderPane>
