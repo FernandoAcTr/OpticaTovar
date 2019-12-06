@@ -11,18 +11,15 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import model.DAO.PacienteDAO;
 import model.Paciente;
-import utils.MyUtils;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class BuscarPacienteController implements Initializable {
-
-    @FXML
-    private JFXButton btnNew, btnRefresh, btnSearch;
-
-    @FXML
-    private TableView<Paciente> tblPacientes;
+/**
+ * Esta clase sirve de cuadro de Dialogo para buscar un paciente. Culquier controlador que la invoque debe extender de
+ * RecivePacientBase
+ */
+public class SearchPacientController implements Initializable {
 
     @FXML
     private JFXTextField txtID;
@@ -33,29 +30,32 @@ public class BuscarPacienteController implements Initializable {
     @FXML
     private JFXTextField txtLastName;
 
-    PacienteDAO pacDAO = new PacienteDAO(MySQL.getConnection());
+    @FXML
+    private JFXButton btnSearch;
+
+    @FXML
+    private TableView<Paciente> tblPacientes;
+
+    private RecivePacientBase reciver;
+    private PacienteDAO pacDAO = new PacienteDAO(MySQL.getConnection());
+
+    public SearchPacientController(RecivePacientBase reciver) {
+        this.reciver = reciver;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         configUI();
         initTable();
-        refreshTable();
     }
 
     private void configUI() {
-        btnNew.setOnAction(event -> {
-            NewPacienteController controller = new NewPacienteController();
-            MyUtils.openWindow(getClass().getResource("/fxml/SceneNuevoCliente.fxml"), "Nuevo Paciente", controller);
-        });
-
-        btnRefresh.setOnAction(event -> refreshTable());
-
         tblPacientes.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 Paciente pac = tblPacientes.getSelectionModel().getSelectedItem();
                 if (pac != null) {
-                    NewPacienteController controller = new NewPacienteController(pac);
-                    MyUtils.openWindow(getClass().getResource("/fxml/SceneNuevoCliente.fxml"), "Nuevo Paciente", controller);
+                    reciver.recivePacient(pac);
+                    btnSearch.getScene().getWindow().hide();
                 }
             }
         });
@@ -67,25 +67,17 @@ public class BuscarPacienteController implements Initializable {
         TableColumn<Paciente, String> colName = new TableColumn<>("Nombre");
         TableColumn<Paciente, String> colId = new TableColumn<>("ID");
         TableColumn<Paciente, String> colApe = new TableColumn<>("Apellidos");
-        TableColumn<Paciente, String> colEdad = new TableColumn<>("Edad");
 
         colName.setCellValueFactory(new PropertyValueFactory<>("nombre"));
-        colName.setPrefWidth(170);
+        colName.setPrefWidth(100);
 
         colApe.setCellValueFactory(new PropertyValueFactory<>("apellidos"));
-        colApe.setPrefWidth(170);
+        colApe.setPrefWidth(250);
 
         colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-        colId.setPrefWidth(130);
+        colId.setPrefWidth(250);
 
-        colEdad.setCellValueFactory(new PropertyValueFactory<>("edad"));
-        colEdad.setPrefWidth(130);
-
-        tblPacientes.getColumns().addAll(colId, colName, colApe, colEdad);
-    }
-
-    private void refreshTable() {
-        tblPacientes.setItems(pacDAO.selectAll());
+        tblPacientes.getColumns().addAll(colId, colName, colApe);
     }
 
     private void search() {

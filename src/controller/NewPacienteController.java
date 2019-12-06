@@ -77,15 +77,29 @@ public class NewPacienteController implements Initializable {
     @FXML
     private JFXButton btnEdit;
 
-    boolean modEdit = false;
-    PacienteDAO pacDao = new PacienteDAO(MySQL.getConnection());
+    private boolean modEdit = false;
+    private Paciente paciente;
+    private PacienteDAO pacDao = new PacienteDAO(MySQL.getConnection());
+
+    public NewPacienteController() {
+    }
+
+    public NewPacienteController(Paciente paciente) {
+        this.paciente = paciente;
+        modEdit = true;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         configUI();
+        if(modEdit){
+            selectPac(paciente);
+            disableButtons();
+            disableFields(false);
+        }
     }
 
-    private void configUI(){
+    private void configUI() {
         btnDelete.setDisable(true);
         btnEdit.setDisable(true);
         btnAdd.setDisable(true);
@@ -144,7 +158,7 @@ public class NewPacienteController implements Initializable {
         cmbEmpresa.setDisable(disable);
     }
 
-    private void clean(){
+    private void clean() {
         txtID.setText("");
         txtNombre.setText("");
         txtApellido.setText("");
@@ -176,7 +190,7 @@ public class NewPacienteController implements Initializable {
         cmbGenero.getSelectionModel().select(pac.getGenero());
         txtCorreo.setText(pac.getEmail());
         txtOcup.setText(pac.getOcupacion());
-        dateFechaNac.setValue(pac.getFechaNac().toLocalDate());
+        dateFechaNac.getEditor().setText(pac.getFechaNac().toString());
         txtEdad.setText(pac.getEdad() + "");
         cmbEmpresa.getSelectionModel().select(getIndexOfEmpresa(pac.getCveEmpresa()));
     }
@@ -198,9 +212,9 @@ public class NewPacienteController implements Initializable {
         pacDao.delete(pac);
     }
 
-    private void setNextID(){
+    private void setNextID() {
         int nextID = pacDao.getNextID();
-        txtID.setText(nextID+"");
+        txtID.setText(nextID + "");
     }
 
     private Paciente getPaciente() {

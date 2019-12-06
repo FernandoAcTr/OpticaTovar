@@ -98,39 +98,7 @@ public class PacienteDAO implements BasicDAO {
     @Override
     public ObservableList<Paciente> selectAll() {
         String query = "SELECT * FROM Paciente";
-        ObservableList<Paciente> listPaciente = FXCollections.observableArrayList();
-        try {
-            Statement st = connection.createStatement();
-            ResultSet rs = st.executeQuery(query);
-
-            while (rs.next()) {
-                int id = rs.getInt(1);
-                String nombre = rs.getString(2);
-                String apellidos = rs.getString(3);
-                String domicilio = rs.getString(4);
-                String colonia =  rs.getString(5);
-                String cp = rs.getString(6);
-                String estado = rs.getString(7);
-                String ciudad = rs.getString(8);
-                String tel = rs.getString(9);
-                String genero = rs.getString(10);
-                String email = rs.getString(11);
-                String ocupacion = rs.getString(12);
-                Date fechaNac = rs.getDate(13);
-                int edad = rs.getInt(14);
-                String cveEmp = rs.getString(15);
-
-                listPaciente.add(new Paciente(id, nombre, apellidos, domicilio, colonia, cp, estado, ciudad, tel, genero, email,
-                        ocupacion, fechaNac, (byte)edad, cveEmp));
-            }
-
-            rs.close();
-            st.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return listPaciente;
+        return select(query);
     }
 
     @Override
@@ -152,9 +120,10 @@ public class PacienteDAO implements BasicDAO {
 
     /**
      * Regresa el ID maximo + 1
+     *
      * @return
      */
-    public int getNextID(){
+    public int getNextID() {
         int nextID = 1;
 
         String query = "SELECT MAX(idCliente) FROM Paciente";
@@ -163,13 +132,78 @@ public class PacienteDAO implements BasicDAO {
             st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
 
-            if(rs.next())
-                 nextID = rs.getInt(1) + 1;
+            if (rs.next())
+                nextID = rs.getInt(1) + 1;
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return nextID;
+    }
+
+    public ObservableList<Paciente> selectByID(String idPaciente) {
+        String query = "Select * FROM Paciente " +
+                " where idCliente = " + idPaciente;
+
+        return select(query);
+    }
+
+    public ObservableList<Paciente> selectByName(String name) {
+        String query = "Select * FROM Paciente " +
+                " where nombre like '" + name + "%'";
+
+        return select(query);
+    }
+
+    public ObservableList<Paciente> selectByLastName(String lastName) {
+        String query = "Select * FROM Paciente " +
+                " where apellidos like '" + lastName + "%'";
+
+        return select(query);
+    }
+
+    public ObservableList<Paciente> selectByNameANDLastName(String name, String lastName) {
+        String query = "Select * FROM Paciente " +
+                " where nombre like '" + name + "%' and apellidos like '" + lastName + "%'";
+
+        return select(query);
+    }
+
+    private ObservableList<Paciente> select(String query) {
+        ObservableList<Paciente> listPaciente = FXCollections.observableArrayList();
+        try {
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                int id = rs.getInt(1);
+                String nombre = rs.getString(2);
+                String apellidos = rs.getString(3);
+                String domicilio = rs.getString(4);
+                String colonia = rs.getString(5);
+                String cp = rs.getString(6);
+                String estado = rs.getString(7);
+                String ciudad = rs.getString(8);
+                String tel = rs.getString(9);
+                String genero = rs.getString(10);
+                String email = rs.getString(11);
+                String ocupacion = rs.getString(12);
+                Date fechaNac = rs.getDate(13);
+                int edad = rs.getInt(14);
+                String cveEmp = rs.getString(15);
+
+                listPaciente.add(new Paciente(id, nombre, apellidos, domicilio, colonia, cp, estado, ciudad, tel, genero, email,
+                        ocupacion, fechaNac, (byte) edad, cveEmp));
+            }
+
+            rs.close();
+            st.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listPaciente;
     }
 }

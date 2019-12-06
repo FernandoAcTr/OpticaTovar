@@ -14,9 +14,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT"
-      prefHeight="720.0" prefWidth="1800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="controller.PrincipalController">
+<VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" nodeOrientation="LEFT_TO_RIGHT" prefHeight="720.0" prefWidth="1800.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PrincipalController">
     <children>
         <HBox prefHeight="30.0">
             <children>
@@ -24,146 +22,131 @@
                     <menus>
                         <Menu mnemonicParsing="false" styleClass="menu" text="Archivo">
                             <items>
-                                <MenuItem mnemonicParsing="false" fx:id="mnuClose" text="Close"/>
+                                <MenuItem fx:id="mnuClose" mnemonicParsing="false" text="Close" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" styleClass="menu" text="Modulos">
                             <items>
                                 <Menu mnemonicParsing="false" text="Catalogos">
                                     <items>
-                                        <MenuItem fx:id="mnuTypeMate" mnemonicParsing="false" text="Tipo de Material"/>
-                                        <MenuItem fx:id="mnuPayForm" mnemonicParsing="false" text="Formas de Pago"/>
-                                        <MenuItem fx:id="mnuMarca" mnemonicParsing="false" text="Marcas"/>
-                                        <MenuItem fx:id="mnuTypeProd" mnemonicParsing="false" text="Tipos de Producto"/>
-                                        <MenuItem fx:id="mnuTypeReview" mnemonicParsing="false"
-                                                  text="Tipos de Consulta"/>
-                                        <MenuItem fx:id="mnuTypeJob" mnemonicParsing="false" text="Puestos"/>
-                                        <MenuItem fx:id="mnuTypeLDC" mnemonicParsing="false" text="Tipos LDC"/>
+                                        <MenuItem fx:id="mnuTypeMate" mnemonicParsing="false" text="Tipo de Material" />
+                                        <MenuItem fx:id="mnuPayForm" mnemonicParsing="false" text="Formas de Pago" />
+                                        <MenuItem fx:id="mnuMarca" mnemonicParsing="false" text="Marcas" />
+                                        <MenuItem fx:id="mnuTypeProd" mnemonicParsing="false" text="Tipos de Producto" />
+                                        <MenuItem fx:id="mnuTypeReview" mnemonicParsing="false" text="Tipos de Consulta" />
+                                        <MenuItem fx:id="mnuTypeJob" mnemonicParsing="false" text="Puestos" />
+                                        <MenuItem fx:id="mnuTypeLDC" mnemonicParsing="false" text="Tipos LDC" />
                                     </items>
                                 </Menu>
-                                <MenuItem fx:id="mnuEmpresas" text="Empresas"/>
-                                <MenuItem fx:id="mnuProveedores" text="Proveedores"/>
-                                <MenuItem fx:id="mnuTrabajadores" text="Trabajadores"/>
-                                <MenuItem fx:id="mnuLabs" text="Laboratorios"/>
+                                <MenuItem fx:id="mnuEmpresas" text="Empresas" />
+                                <MenuItem fx:id="mnuProveedores" text="Proveedores" />
+                                <MenuItem fx:id="mnuTrabajadores" text="Trabajadores" />
+                                <MenuItem fx:id="mnuLabs" text="Laboratorios" />
                             </items>
                         </Menu>
                         <Menu mnemonicParsing="false" styleClass="menu" text="Acerca de...">
                             <items>
-                                <MenuItem mnemonicParsing="false" styleClass="menuitem" text="About"/>
+                                <MenuItem mnemonicParsing="false" styleClass="menuitem" text="About" />
                             </items>
                         </Menu>
                     </menus>
                 </MenuBar>
             </children>
         </HBox>
-        <AnchorPane minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="720.0"
-                    prefWidth="1800.0" styleClass="stage" VBox.vgrow="ALWAYS">
+        <AnchorPane minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="RIGHT_TO_LEFT" prefHeight="720.0" prefWidth="1800.0" styleClass="stage" VBox.vgrow="ALWAYS">
             <children>
-                <ToolBar id="main_toolbar" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                         minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="62.0"
-                         AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <ToolBar id="main_toolbar" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" nodeOrientation="LEFT_TO_RIGHT" prefHeight="62.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <items>
-                        <JFXButton fx:id="btnPacientes" accessibleRole="BUTTON" minHeight="-Infinity"
-                                   minWidth="-Infinity" prefHeight="59.0" prefWidth="62.0" ripplerFill="WHITE"
-                                   textFill="WHITE">
+                        <JFXButton fx:id="btnPacientes" accessibleRole="BUTTON" minHeight="-Infinity" minWidth="-Infinity" prefHeight="59.0" prefWidth="62.0" ripplerFill="WHITE" textFill="WHITE">
                             <cursor>
-                                <Cursor fx:constant="HAND"/>
+                                <Cursor fx:constant="HAND" />
                             </cursor>
                             <graphic>
-                                <ImageView accessibleHelp="Pacientes" accessibleRole="IMAGE_VIEW" fitHeight="51.0"
-                                           fitWidth="49.0" pickOnBounds="true" preserveRatio="true">
+                                <ImageView accessibleHelp="Pacientes" accessibleRole="IMAGE_VIEW" fitHeight="51.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../imagenes/pacientes.png"/>
+                                        <Image url="@../imagenes/pacientes.png" />
                                     </image>
                                     <cursor>
-                                        <Cursor fx:constant="HAND"/>
+                                        <Cursor fx:constant="HAND" />
                                     </cursor>
                                 </ImageView>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="Pacientes"/>
+                                <Tooltip text="Pacientes" />
                             </tooltip>
                         </JFXButton>
-                        <JFXButton accessibleRole="BUTTON" minHeight="-Infinity" minWidth="-Infinity" prefHeight="59.0"
-                                   prefWidth="62.0" ripplerFill="WHITE" textFill="WHITE">
+                        <JFXButton fx:id="btnTerapias" accessibleRole="BUTTON" minHeight="-Infinity" minWidth="-Infinity" prefHeight="59.0" prefWidth="62.0" ripplerFill="WHITE" textFill="WHITE">
                             <cursor>
-                                <Cursor fx:constant="HAND"/>
+                                <Cursor fx:constant="HAND" />
                             </cursor>
                             <graphic>
-                                <ImageView accessibleHelp="Citas" accessibleRole="IMAGE_VIEW" fitHeight="57.0"
-                                           fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                                <ImageView accessibleHelp="Citas" accessibleRole="IMAGE_VIEW" fitHeight="57.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../imagenes/reloj.png"/>
+                                        <Image url="@../imagenes/reloj.png" />
                                     </image>
                                     <cursor>
-                                        <Cursor fx:constant="HAND"/>
+                                        <Cursor fx:constant="HAND" />
                                     </cursor>
                                 </ImageView>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="Terapias"/>
+                                <Tooltip text="Terapias" />
                             </tooltip>
                         </JFXButton>
-                        <JFXButton accessibleText="Proveedores" minHeight="-Infinity" minWidth="-Infinity"
-                                   prefHeight="64.0" prefWidth="65.0" ripplerFill="WHITE" textFill="WHITE">
+                        <JFXButton fx:id="btnProveedores" accessibleText="Proveedores" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="65.0" ripplerFill="WHITE" textFill="WHITE">
                             <graphic>
-                                <ImageView accessibleHelp="Proveedores" fitHeight="91.0" fitWidth="54.0"
-                                           pickOnBounds="true" preserveRatio="true">
+                                <ImageView accessibleHelp="Proveedores" fitHeight="91.0" fitWidth="54.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../imagenes/proveedores.png"/>
+                                        <Image url="@../imagenes/proveedores.png" />
                                     </image>
                                 </ImageView>
                             </graphic>
                             <cursor>
-                                <Cursor fx:constant="HAND"/>
+                                <Cursor fx:constant="HAND" />
                             </cursor>
                             <tooltip>
-                                <Tooltip text="Proveedores"/>
+                                <Tooltip text="Proveedores" />
                             </tooltip>
                         </JFXButton>
-                        <JFXButton accessibleText="Compras" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0"
-                                   prefWidth="65.0" ripplerFill="WHITE" textFill="WHITE">
+                        <JFXButton accessibleText="Compras" minHeight="-Infinity" minWidth="-Infinity" prefHeight="64.0" prefWidth="65.0" ripplerFill="WHITE" textFill="WHITE">
                             <graphic>
-                                <ImageView accessibleHelp="Compras" fitHeight="62.0" fitWidth="66.0" pickOnBounds="true"
-                                           preserveRatio="true">
+                                <ImageView accessibleHelp="Compras" fitHeight="62.0" fitWidth="66.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../imagenes/compras.png"/>
+                                        <Image url="@../imagenes/compras.png" />
                                     </image>
                                 </ImageView>
                             </graphic>
                             <cursor>
-                                <Cursor fx:constant="HAND"/>
+                                <Cursor fx:constant="HAND" />
                             </cursor>
                             <padding>
-                                <Insets right="1.0"/>
+                                <Insets right="1.0" />
                             </padding>
                             <tooltip>
-                                <Tooltip text="Compras"/>
+                                <Tooltip text="Compras" />
                             </tooltip>
                         </JFXButton>
-                        <JFXButton minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="74.0"
-                                   ripplerFill="WHITE" textFill="WHITE" textOverrun="WORD_ELLIPSIS">
+                        <JFXButton minHeight="-Infinity" minWidth="-Infinity" prefHeight="58.0" prefWidth="74.0" ripplerFill="WHITE" textFill="WHITE" textOverrun="WORD_ELLIPSIS">
                             <graphic>
-                                <ImageView accessibleHelp="Almacen" fitHeight="51.0" fitWidth="61.0" pickOnBounds="true"
-                                           preserveRatio="true">
+                                <ImageView accessibleHelp="Almacen" fitHeight="51.0" fitWidth="61.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
-                                        <Image url="@../imagenes/almacen.png"/>
+                                        <Image url="@../imagenes/almacen.png" />
                                     </image>
                                 </ImageView>
                             </graphic>
                             <opaqueInsets>
-                                <Insets/>
+                                <Insets />
                             </opaqueInsets>
                             <cursor>
-                                <Cursor fx:constant="HAND"/>
+                                <Cursor fx:constant="HAND" />
                             </cursor>
                             <tooltip>
-                                <Tooltip text="Almacen"/>
+                                <Tooltip text="Almacen" />
                             </tooltip>
                         </JFXButton>
                     </items>
                     <opaqueInsets>
-                        <Insets right="5.0"/>
+                        <Insets right="5.0" />
                     </opaqueInsets>
                 </ToolBar>
             </children>

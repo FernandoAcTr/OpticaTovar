@@ -6,16 +6,17 @@ import model.Trabajador;
 
 import java.sql.*;
 
-public class TrabajadorDAO implements BasicDAO{
+public class TrabajadorDAO implements BasicDAO {
     Connection connection;
+
     public TrabajadorDAO(Connection connection) {
         this.connection = connection;
     }
 
     /**
      * Guarda una nuevo Trabajador
-     * @param bean
      *
+     * @param bean
      * @return
      */
     public boolean insert(Object bean) {
@@ -49,6 +50,7 @@ public class TrabajadorDAO implements BasicDAO{
 
     /**
      * Actualiza un Trabajador
+     *
      * @param bean
      * @return
      */
@@ -94,11 +96,58 @@ public class TrabajadorDAO implements BasicDAO{
 
     /**
      * Devuelve todas los trabajadores
+     *
      * @return
      */
 
     public ObservableList<Trabajador> selectAll() {
         String query = "SELECT * FROM Trabajador";
+        return select(query);
+    }
+
+    public boolean delete(Object bean) {
+        Trabajador trab = (Trabajador) bean;
+
+        String query = "DELETE FROM Trabajador WHERE rfc = '" + trab.getRfc() + "'";
+        boolean success = false;
+
+        try {
+            Statement st = connection.createStatement();
+            success = !st.execute(query);
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return success;
+    }
+
+    public ObservableList<Trabajador> selectTerapeutas() {
+        String query = "select *" +
+                " from Trabajador" +
+                " where cvePuesto = (select p.cvePuesto" +
+                "                   from Puesto p" +
+                "                   where p.descripcion like 'terapeuta%')";
+        return select(query);
+    }
+
+    public ObservableList<Trabajador> selectMostrador() {
+        String query = "select *" +
+                " from Trabajador" +
+                " where cvePuesto = (select p.cvePuesto" +
+                "                   from Puesto p" +
+                "                   where p.descripcion like 'mostrador%')";
+        return select(query);
+    }
+
+    public Trabajador selectByRFC(String rfc) {
+        String query = "Select * from Trabajador" +
+                " where rfc = '" + rfc + "'";
+
+        return select(query).get(0);
+    }
+
+    private ObservableList<Trabajador> select(String query) {
         ObservableList<Trabajador> listTrab = FXCollections.observableArrayList();
         try {
             Statement st = connection.createStatement();
@@ -117,8 +166,8 @@ public class TrabajadorDAO implements BasicDAO{
                 Date fechaContra = rs.getDate(10);
                 String cvePuesto = rs.getString(11);
 
-                listTrab.add(new Trabajador(rfc, genero,nombre,apellidos,domicilio,fechaNac,ciudad,
-                        estado,telefono,fechaContra,cvePuesto));
+                listTrab.add(new Trabajador(rfc, genero, nombre, apellidos, domicilio, fechaNac, ciudad,
+                        estado, telefono, fechaContra, cvePuesto));
             }
 
             rs.close();
@@ -128,24 +177,6 @@ public class TrabajadorDAO implements BasicDAO{
         }
 
         return listTrab;
-    }
-
-
-    public boolean delete(Object bean){
-        Trabajador trab = (Trabajador) bean;
-
-        String query = "DELETE FROM Trabajador WHERE rfc = '" + trab.getRfc()+"'";
-        boolean success = false;
-
-        try {
-            Statement st = connection.createStatement();
-            success = !st.execute(query);
-            st.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return success;
     }
 
 }

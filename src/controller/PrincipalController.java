@@ -44,7 +44,7 @@ public class PrincipalController implements Initializable {
     private MenuItem mnuClose, mnuEmpresas, mnuProveedores, mnuTrabajadores, mnuLabs;
 
     @FXML
-    private JFXButton btnPacientes;
+    private JFXButton btnPacientes, btnTerapias, btnProveedores;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -53,6 +53,7 @@ public class PrincipalController implements Initializable {
 
     private void configComponents() {
         btnPacientes.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneBuscarPaciente.fxml"), "Buscar Paciente"));
+
         mnuMarca.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/CatMarcas.fxml"), "Catalogo de Marcas"));
         mnuPayForm.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/CatFormaPago.fxml"), "Catalogo de Formas de Pago"));
         mnuTypeJob.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/CatPuesto.fxml"), "Catalogo de Puestos"));
@@ -64,7 +65,10 @@ public class PrincipalController implements Initializable {
         mnuEmpresas.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneEmpresa.fxml"), "Empresas con Convenio"));
         mnuProveedores.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneProveedor.fxml"), "Proveedores"));
         mnuTrabajadores.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneTrabajador.fxml"), "Trabajadores"));
-        mnuLabs.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneLaboratorio.fxml"), "Trabajadores"));
+        mnuLabs.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneLaboratorio.fxml"), "Laboratorios"));
+
+        btnTerapias.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneTerapias.fxml"), "Terapias"));
+        btnProveedores.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneProveedor.fxml"), "Proveedores"));
 
         mnuClose.setOnAction(event -> {
             MySQL.Disconnect();

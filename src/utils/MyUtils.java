@@ -3,8 +3,10 @@ package utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -23,6 +25,21 @@ public class MyUtils {
         Parent root;
         try {
             root = FXMLLoader.load(url);
+            Stage stage = new Stage();
+            stage.setTitle(title);
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void openWindow(URL url, String title, Object controller){
+        FXMLLoader loader = new FXMLLoader(url);
+        Parent root;
+        try {
+            loader.setController(controller);
+            root = loader.load();
             Stage stage = new Stage();
             stage.setTitle(title);
             stage.setScene(new Scene(root));
@@ -95,5 +112,13 @@ public class MyUtils {
             if(Character.isLetter(event.getCharacter().charAt(0)))
                 event.consume();
         });
+    }
+
+    public static Alert makeDialog(String title, String header, String content, Alert.AlertType type){
+        Alert alert = new Alert(type);
+        alert.setHeaderText(header);
+        alert.setTitle(title);
+        alert.setContentText(content);
+        return alert;
     }
 }

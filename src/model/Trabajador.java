@@ -115,4 +115,9 @@ public class Trabajador {
     public void setCvePuesto(String cvePuesto) {
         this.cvePuesto = cvePuesto;
     }
+
+    @Override
+    public String toString() {
+        return nombre + " " + apellidos;
+    }
 }
