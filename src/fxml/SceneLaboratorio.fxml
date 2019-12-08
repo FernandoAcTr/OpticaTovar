@@ -13,7 +13,7 @@
 
 
 <BorderPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controller.LabController">
+            fx:controller="modulos.laboratorios.LabController">
     <center>
         <TableView fx:id="tblLaboratorio" prefHeight="304.0" prefWidth="400.0">
 
