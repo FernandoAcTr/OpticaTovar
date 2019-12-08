@@ -9,8 +9,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import modulos.laboratorios.LaboratorioDAO;
-import modulos.laboratorios.Laboratorio;
 import utils.MyUtils;
 
 import java.net.URL;

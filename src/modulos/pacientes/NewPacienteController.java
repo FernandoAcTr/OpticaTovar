@@ -5,6 +5,8 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import connection.MySQL;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,10 +14,12 @@ import modulos.empresas.EmpresaDAO;
 import modulos.pacientes.PacienteDAO;
 import modulos.empresas.Empresa;
 import modulos.pacientes.Paciente;
+import utils.FormatDate;
 import utils.MyUtils;
 
 import java.net.URL;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class NewPacienteController implements Initializable {
@@ -131,6 +135,12 @@ public class NewPacienteController implements Initializable {
         });
 
         btnEdit.setOnAction(event -> updatePac());
+
+        dateFechaNac.valueProperty().addListener((observable, oldValue, newValue) -> {
+            FormatDate fechaNac = new FormatDate(Date.valueOf(newValue));
+            int edad = FormatDate.getPeriod(fechaNac);
+            txtEdad.setText(edad+"");
+        });
 
         MyUtils.stablishNumericRestriction(txtEdad);
     }

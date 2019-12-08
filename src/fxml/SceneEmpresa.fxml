@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextArea?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.TableView?>
@@ -43,7 +44,7 @@
                 <JFXTextField fx:id="txtRFC" labelFloat="true" prefHeight="26.0" prefWidth="250.0" promptText="RFC" unFocusColor="#bf2eba" />
                 <JFXTextField fx:id="txtTelefono" labelFloat="true" prefHeight="26.0" prefWidth="250.0" promptText="TELEFONO" unFocusColor="#bf2eba" />
                 <JFXComboBox fx:id="cmbStatus" labelFloat="true" minWidth="250.0" promptText="STATUS" />
-                <JFXTextField fx:id="txtObs" alignment="TOP_LEFT" prefHeight="100.0" prefWidth="250.0" promptText="OBSERVACIONES" unFocusColor="#bf2eba" />
+            <JFXTextArea fx:id="txtObs" labelFloat="true" prefHeight="100.0" prefWidth="250.0" promptText="OBSERVACIONES" />
             </children>
             <BorderPane.margin>
                 <Insets left="10.0" />

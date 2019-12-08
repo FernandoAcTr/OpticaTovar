@@ -2,6 +2,7 @@ package modulos.empresas;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import connection.MySQL;
 import javafx.fxml.FXML;
@@ -43,7 +44,7 @@ public class EmpresaController implements Initializable {
     private JFXComboBox<String> cmbStatus;
 
     @FXML
-    private JFXTextField txtObs;
+    private JFXTextArea txtObs;
 
     @FXML
     private JFXButton btnNew;
@@ -182,7 +183,7 @@ public class EmpresaController implements Initializable {
         empresaDAO.delete(emp);
     }
 
-    private void selectEmpresa(Empresa empresa){
+    private void selectEmpresa(Empresa empresa) {
         String cve = empresa.getCveEmpresa();
         double desc = empresa.getDescuento();
         String email = empresa.getEmail();
@@ -193,7 +194,7 @@ public class EmpresaController implements Initializable {
         String status = empresa.getStatus();
 
         txtClave.setText(cve);
-        txtDescuento.setText(MyUtils.trimFloat((float)desc));
+        txtDescuento.setText(MyUtils.trimFloat((float) desc));
         txtEmail.setText(email);
         txtTelefono.setText(tel);
         txtNombre.setText(name);
@@ -202,9 +203,13 @@ public class EmpresaController implements Initializable {
         cmbStatus.getSelectionModel().select(status);
     }
 
-    private Empresa getEmpresa(){
+    private Empresa getEmpresa() {
         String cve = txtClave.getText().trim();
-        double desc = Double.valueOf(txtDescuento.getText());
+        double desc;
+        if (txtDescuento.getText().length() == 0)
+            desc = 0;
+        else
+            desc = Double.valueOf(txtDescuento.getText());
         String email = txtEmail.getText().trim();
         String name = txtNombre.getText().trim();
         String obs = txtObs.getText().trim();

@@ -44,7 +44,7 @@ public class PrincipalController implements Initializable {
     private MenuItem mnuClose, mnuEmpresas, mnuProveedores, mnuTrabajadores, mnuLabs;
 
     @FXML
-    private JFXButton btnPacientes, btnTerapias, btnProveedores, btnAlmacen;
+    private JFXButton btnPacientes, btnTerapias, btnProveedores, btnAlmacen, btnCompras;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -70,6 +70,7 @@ public class PrincipalController implements Initializable {
         btnTerapias.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneTerapias.fxml"), "Terapias"));
         btnProveedores.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneProveedor.fxml"), "Proveedores"));
         btnAlmacen.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneProductos.fxml"), "Almacen"));
+        btnCompras.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneFactura.fxml"), "Compras"));
 
         mnuClose.setOnAction(event -> {
             MySQL.Disconnect();
