@@ -37,6 +37,12 @@
                               <MenuItem fx:id="mnuConsultaCompra" mnemonicParsing="false" text="Consultar" />
                           </items>
                         </Menu>
+                        <Menu mnemonicParsing="false" text="Pedidos">
+                          <items>
+                            <MenuItem fx:id="mnuAltaPedido" mnemonicParsing="false" text="Altas" />
+                              <MenuItem fx:id="mnuConsultaPedido" mnemonicParsing="false" text="Consultar" />
+                          </items>
+                        </Menu>
                             </items>
                         </Menu>
                           <Menu mnemonicParsing="false" text="Catalogos">
@@ -150,6 +156,24 @@
                                 <Tooltip text="Almacen" />
                             </tooltip>
                         </JFXButton>
+                  <JFXButton fx:id="btnPedidos" accessibleRole="BUTTON" minHeight="-Infinity" minWidth="-Infinity" prefHeight="59.0" prefWidth="62.0" ripplerFill="WHITE" textFill="WHITE">
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <graphic>
+                        <ImageView accessibleHelp="Pacientes" accessibleRole="IMAGE_VIEW" fitHeight="51.0" fitWidth="49.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../imagenes/pedidos.png" />
+                           </image>
+                           <cursor>
+                              <Cursor fx:constant="HAND" />
+                           </cursor>
+                        </ImageView>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip text="Pedidos" />
+                     </tooltip>
+                  </JFXButton>
                     </items>
                     <opaqueInsets>
                         <Insets right="5.0" />

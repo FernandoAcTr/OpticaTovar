@@ -1,36 +1,39 @@
-package modulos.facturas;
+package modulos.pedidos;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.BasicDAO;
+import modulos.facturas.TableBean;
 import modulos.productos.ProductDAO;
 
 import java.sql.*;
 import java.util.List;
 
-public class FacturaDAO implements BasicDAO {
+public class PedidoDAO implements BasicDAO {
 
     private Connection connection;
 
-    public FacturaDAO(Connection connection) {
+    public PedidoDAO(Connection connection) {
         this.connection = connection;
     }
 
     @Override
     public boolean insert(Object bean) {
-        Factura fact = (Factura) bean;
+        Pedido ped = (Pedido) bean;
 
-        String query = "Insert into Factura(factura,fechaExp,subtotal,descuento,impuesto, total,codProveedor) values (?,?,?,?,?,?,?)";
+        String query = "Insert into Pedido(status, fecha, subtotal, descuento,iva, total, observaciones, rfcTrab, idCliente) values (?,?,?,?,?,?,?,?,?)";
         boolean success = false;
         try {
             PreparedStatement ps = connection.prepareStatement(query);
-            ps.setString(1, fact.getFactura());
-            ps.setDate(2, fact.getFechaExp());
-            ps.setDouble(3, fact.getSubtotal());
-            ps.setDouble(4, fact.getDescuento());
-            ps.setDouble(5, fact.getImpuesto());
-            ps.setDouble(6, fact.getTotal());
-            ps.setString(7, fact.getCodProv());
+            ps.setString(1, ped.getStatus());
+            ps.setDate(2, ped.getFecha());
+            ps.setDouble(3, ped.getSubtotal());
+            ps.setDouble(4, ped.getDescuento());
+            ps.setDouble(5, ped.getImpuesto());
+            ps.setDouble(6, ped.getTotal());
+            ps.setString(7, ped.getObs());
+            ps.setString(8, ped.getRfcTrab());
+            ps.setInt(9, ped.getIdCliente());
             success = !ps.execute();
             ps.close();
         } catch (SQLException e) {
@@ -45,22 +48,15 @@ public class FacturaDAO implements BasicDAO {
     }
 
     @Override
-    public ObservableList<Factura> selectAll() {
-        String query = "SELECT f.*,  P.nombre" +
-                " FROM Factura f join Proveedor P on f.codProveedor = P.codProveedor";
+    public ObservableList selectAll() {
+        String query = "Select * from Pedido";
         return select(query);
     }
 
-    public ObservableList<Factura> selectByProv(String codProv) {
-        String query = "SELECT f.*,  P.nombre" +
-                " FROM Factura f join Proveedor P on f.codProveedor = P.codProveedor " +
-                " WHERE P.codProveedor = '" + codProv + "'";
+    public ObservableList<Pedido> selectByCliente(int idCliente){
+        String query = "Select * from Pedido " +
+                " where idCliente = " + idCliente;
         return select(query);
-    }
-
-    @Override
-    public boolean delete(Object bean) {
-        return false;
     }
 
     /**
@@ -71,7 +67,7 @@ public class FacturaDAO implements BasicDAO {
     public int getNextFolio() {
         int nextFolio = 1;
 
-        String query = "SELECT MAX(folio) FROM Factura";
+        String query = "SELECT MAX(noPedido) FROM Pedido";
         Statement st;
         try {
             st = connection.createStatement();
@@ -88,21 +84,22 @@ public class FacturaDAO implements BasicDAO {
     }
 
     /**
-     * Registra una lista de productos en una determinada factura
+     * Registra una lista de productos en un determinado pedido
      *
      * @param products
-     * @param folio    El folio de la factura donde se van a registrar
+     * @param noPedido    El noPedido del pedido a registrar
      * @return
      */
-    public boolean registerProducts(List<TableBean> products, int folio) {
+    public boolean registerProducts(List<TableBean> products, int noPedido) {
 
-        String query = "Insert into ProductoFactura(folio,codProd,cantidad,precioUnit, descuento) values (?,?,?,?, ?)";
+        String query = "Insert into RegistroVenta(codProd,noPedido,cantidad,precioUnit, descuento) values (?,?,?,?,?)";
         try {
             for (TableBean prod : products) {
                 if (prod.getProducto() != null) {
                     PreparedStatement ps = connection.prepareStatement(query);
-                    ps.setInt(1, folio);
-                    ps.setString(2, prod.getProducto());
+
+                    ps.setString(1, prod.getProducto());
+                    ps.setInt(2, noPedido);
                     ps.setInt(3, prod.getCantidad());
                     ps.setDouble(4, prod.getCosto());
                     ps.setInt(5, prod.getDescuento());
@@ -122,28 +119,33 @@ public class FacturaDAO implements BasicDAO {
     private void updateStockProductos(List<TableBean> products) {
         ProductDAO productDAO = new ProductDAO(connection);
         for (TableBean prod : products)
-            productDAO.incrementStock(prod.getProducto(), prod.getCantidad());
-
+            productDAO.decrementStock(prod.getProducto(), prod.getCantidad());
     }
 
-    private ObservableList<Factura> select(String query) {
-        ObservableList<Factura> listFacts = FXCollections.observableArrayList();
+    @Override
+    public boolean delete(Object bean) {
+        return false;
+    }
+
+    private ObservableList<Pedido> select(String query) {
+        ObservableList<Pedido> listPeds = FXCollections.observableArrayList();
         try {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(query);
 
             while (rs.next()) {
-                int folio = rs.getInt(1);
-                String factura = rs.getString(2);
-                Date fecha = rs.getDate(3);
-                double sub = rs.getDouble(4);
-                double des = rs.getDouble(5);
-                double imp = rs.getDouble(6);
-                double total = rs.getDouble(7);
-                String codProv = rs.getString(8);
-                String nombreProv = rs.getString(9);
+                int noPed = rs.getInt("noPedido");
+                String status = rs.getString("status");
+                Date fecha = rs.getDate("fecha");
+                double sub = rs.getDouble("subtotal");
+                double des = rs.getDouble("descuento");
+                double imp = rs.getDouble("iva");
+                double total = rs.getDouble("total");
+                String obs = rs.getString("observaciones");
+                String rfcTrab = rs.getString("rfcTrab");
+                int idCliente = rs.getInt("idCliente");
 
-                listFacts.add(new Factura(folio, factura, fecha, sub, des, imp, total, codProv, nombreProv));
+                listPeds.add(new Pedido(noPed, status, fecha, sub, des, imp, total, obs, rfcTrab, idCliente));
             }
 
             rs.close();
@@ -152,21 +154,21 @@ public class FacturaDAO implements BasicDAO {
             e.printStackTrace();
         }
 
-        return listFacts;
+        return listPeds;
     }
 
     /**
-     * Regresa todos los productos de una determinada factura
+     * Regresa todos los productos de un determinado pedido
      *
-     * @param folio
+     * @param noPed
      * @return
      */
-    public ObservableList<TableBean> selectProductByFact(int folio) {
+    public ObservableList<TableBean> selectProductByNoPed(int noPed) {
         ObservableList<TableBean> beans = FXCollections.observableArrayList();
 
-        String query = "select P.codProd, PF.cantidad, P.descripcion, PF.precioUnit, PF.descuento " +
-                "from Producto P join ProductoFactura PF on P.codProd = PF.codProd " +
-                "where PF.folio = " + folio;
+        String query = "select P.codProd, RV.cantidad, P.descripcion, RV.precioUnit, RV.descuento " +
+                "from Producto P join RegistroVenta RV on P.codProd = RV.codProd " +
+                "where RV.noPedido = " + noPed;
 
         try {
             Statement st = connection.createStatement();

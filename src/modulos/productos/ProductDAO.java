@@ -158,7 +158,7 @@ public class ProductDAO implements BasicDAO {
         return listProducts;
     }
 
-    public boolean updateStock(String codProd, int stockIncrement) {
+    public boolean incrementStock(String codProd, int stockIncrement) {
 
         String query = "update Producto " +
                 " set stock = stock + ?" +
@@ -168,6 +168,26 @@ public class ProductDAO implements BasicDAO {
         try {
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setInt(1, stockIncrement);
+            ps.setString(2, codProd);
+            success = !ps.execute();
+            ps.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return success;
+    }
+
+    public boolean decrementStock(String codProd, int stockDecrement) {
+
+        String query = "update Producto " +
+                " set stock = stock - ?" +
+                " where codProd = ?";
+        boolean success = false;
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, stockDecrement);
             ps.setString(2, codProd);
             success = !ps.execute();
             ps.close();

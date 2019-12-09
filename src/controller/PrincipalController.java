@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import modulos.facturas.FacturaController;
+import modulos.pedidos.PedidosController;
 import utils.MyUtils;
 
 import java.io.IOException;
@@ -42,10 +43,11 @@ public class PrincipalController implements Initializable {
     private MenuItem mnuTypeLDC;
 
     @FXML
-    private MenuItem mnuClose, mnuEmpresas, mnuProveedores, mnuTrabajadores, mnuLabs, mnuCompra, mnuConsultaCompra;
+    private MenuItem mnuClose, mnuEmpresas, mnuProveedores, mnuTrabajadores, mnuLabs,
+            mnuCompra, mnuConsultaCompra, mnuConsultaPedido, mnuAltaPedido;
 
     @FXML
-    private JFXButton btnPacientes, btnTerapias, btnProveedores, btnAlmacen, btnCompras;
+    private JFXButton btnPacientes, btnTerapias, btnProveedores, btnAlmacen, btnCompras, btnPedidos;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -67,15 +69,20 @@ public class PrincipalController implements Initializable {
         mnuProveedores.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneProveedor.fxml"), "Proveedores"));
         mnuTrabajadores.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneTrabajador.fxml"), "Trabajadores"));
         mnuLabs.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneLaboratorio.fxml"), "Laboratorios"));
-        mnuConsultaCompra.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneBuscarFactura.fxml"), "Compras"));
 
         FacturaController controller = new FacturaController(null);
         mnuCompra.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneFactura.fxml"), "Compras", controller));
         btnCompras.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneFactura.fxml"), "Compras", controller));
+        mnuConsultaCompra.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneBuscarFactura.fxml"), "Compras"));
 
         btnTerapias.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneTerapias.fxml"), "Terapias"));
         btnProveedores.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneProveedor.fxml"), "Proveedores"));
         btnAlmacen.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneProductos.fxml"), "Almacen"));
+
+        PedidosController pedidosController = new PedidosController(null);
+        btnPedidos.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/ScenePedido.fxml"), "Pedidos", pedidosController));
+        mnuAltaPedido.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/ScenePedido.fxml"), "Pedidos", pedidosController));
+        mnuConsultaPedido.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneBuscarPedido.fxml"), "Consulta de Pedidos"));
 
         mnuClose.setOnAction(event -> {
             MySQL.Disconnect();

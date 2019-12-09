@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="modulos.pedidos.BuscarPedidoController">
+    <children>
+        <GridPane vgap="10.0">
+            <columnConstraints>
+                <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="548.0" minWidth="10.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="325.0" minWidth="10.0" prefWidth="142.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <JFXButton fx:id="btnSearch" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" text="Buscar" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.valignment="BASELINE" />
+                <JFXTextField fx:id="txtID" labelFloat="true" promptText="ID CLIENTE" />
+            </children>
+            <VBox.margin>
+                <Insets left="10.0" top="10.0" />
+            </VBox.margin>
+        </GridPane>
+        <TableView fx:id="tblPedidos" VBox.vgrow="ALWAYS">
+            <VBox.margin>
+                <Insets top="15.0" />
+            </VBox.margin>
+            <columns>
+                <TableColumn fx:id="colNoPed" editable="false" prefWidth="100.0" text="NO. Pedido" />
+                <TableColumn fx:id="colStatus" editable="false" prefWidth="100.0" text="Status" />
+                <TableColumn fx:id="colTotal" editable="false" prefWidth="150.0" text="Total" />
+            </columns>
+        </TableView>
+    </children>
+</VBox>

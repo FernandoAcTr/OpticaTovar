@@ -18,7 +18,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ResourceBundle;
 
-public class NewTerapiaController extends RecivePacientBase implements Initializable {
+public class NewTerapiaController implements Initializable, RecivePacientBase {
     @FXML
     private JFXTextField txtID;
 

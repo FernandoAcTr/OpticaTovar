@@ -26,7 +26,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ResourceBundle;
 
-public class TerapiasController extends RecivePacientBase implements Initializable {
+public class TerapiasController implements Initializable, RecivePacientBase {
 
     @FXML
     private JFXButton btnNew;

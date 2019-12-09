@@ -90,6 +90,35 @@ public class EmpresaDAO implements BasicDAO {
      */
     public ObservableList<Empresa> selectAll() {
         String query = "SELECT * FROM Empresa";
+        return select(query);
+    }
+
+    public Empresa selectByID(String cveEmpresa){
+        String query = "SELECT * FROM Empresa " +
+                " WHERE cveEmpresa = '" + cveEmpresa + "'";
+        return select(query).get(0);
+    }
+
+
+    public boolean delete(Object bean){
+
+        Empresa empresa = (Empresa) bean;
+
+        String query = "DELETE FROM Empresa WHERE cveEmpresa = '" + empresa.getCveEmpresa()+"'";
+        boolean success = false;
+
+        try {
+            Statement st = connection.createStatement();
+            success = !st.execute(query);
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return success;
+    }
+
+    public ObservableList<Empresa> select(String query) {
         ObservableList<Empresa> lisEmpresas = FXCollections.observableArrayList();
         try {
             Statement st = connection.createStatement();
@@ -116,25 +145,6 @@ public class EmpresaDAO implements BasicDAO {
         }
 
         return lisEmpresas;
-    }
-
-
-    public boolean delete(Object bean){
-
-        Empresa empresa = (Empresa) bean;
-
-        String query = "DELETE FROM Empresa WHERE cveEmpresa = '" + empresa.getCveEmpresa()+"'";
-        boolean success = false;
-
-        try {
-            Statement st = connection.createStatement();
-            success = !st.execute(query);
-            st.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return success;
     }
 
 

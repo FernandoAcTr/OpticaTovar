@@ -1,30 +1,37 @@
-package modulos.facturas;
+package modulos.pedidos;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXDatePicker;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import connection.MySQL;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import modulos.catalogos.CatFormaPagoDAO;
+import modulos.catalogos.FormaPago;
+import modulos.empresas.Empresa;
+import modulos.empresas.EmpresaDAO;
+import modulos.facturas.TableBean;
+import modulos.pacientes.Paciente;
+import modulos.pacientes.PacienteDAO;
+import modulos.pacientes.RecivePacientBase;
+import modulos.pacientes.SearchPacientController;
 import modulos.productos.ProductDAO;
 import modulos.productos.Producto;
 import modulos.productos.ReciveProductBase;
 import modulos.productos.SearchProductController;
-import modulos.proveedores.Proveedor;
-import modulos.proveedores.ProveedorDAO;
+import modulos.trabajadores.Trabajador;
+import modulos.trabajadores.TrabajadorDAO;
 import utils.MyUtils;
 
 import java.net.URL;
 import java.sql.Date;
 import java.util.ResourceBundle;
 
-public class FacturaController implements Initializable, ReciveProductBase {
+public class PedidosController implements Initializable, ReciveProductBase, RecivePacientBase {
 
     @FXML
     private JFXButton btnNew;
@@ -33,19 +40,28 @@ public class FacturaController implements Initializable, ReciveProductBase {
     private JFXButton btnDelete;
 
     @FXML
+    private JFXTextField txtNoPedido, txtIdCliente;
+
+    @FXML
+    private Label lblName;
+
+    @FXML
     private Label lblDir;
 
     @FXML
-    private Label lblCP;
+    private JFXDatePicker dateFecha;
 
     @FXML
-    private Label lblRFC;
+    private JFXComboBox<FormaPago> cmbFormaPago;
 
     @FXML
-    private Label lblDiasCred;
+    private JFXComboBox<Trabajador> cmbTrab;
 
     @FXML
-    private JFXTextField txtFolio, txtFactura;
+    private JFXComboBox<String> cmbStatus;
+
+    @FXML
+    private Label lblEmpresa;
 
     @FXML
     private TableView<TableBean> tblProd;
@@ -69,7 +85,7 @@ public class FacturaController implements Initializable, ReciveProductBase {
     private TableColumn<TableBean, Number> colTotal;
 
     @FXML
-    private JFXComboBox<Proveedor> cmbProveedor;
+    private JFXTextArea txtObs;
 
     @FXML
     private Label lblSub;
@@ -89,51 +105,86 @@ public class FacturaController implements Initializable, ReciveProductBase {
     @FXML
     private JFXButton btnSave;
 
-    @FXML
-    private JFXDatePicker dateFech;
+    Pedido pedido = new Pedido();
 
-    FacturaDAO facturaDAO = new FacturaDAO(MySQL.getConnection());
     ProductDAO productDAO = new ProductDAO(MySQL.getConnection());
-
-    Factura factura = new Factura();
+    PedidoDAO pedidoDAO = new PedidoDAO(MySQL.getConnection());
     boolean modSave = false;
     boolean modSelect = false;
 
-    public FacturaController(Factura factura) {
-        if (factura != null) {
-            this.factura = factura;
+    public PedidosController(Pedido pedido){
+        if(pedido != null) {
+            this.pedido = pedido;
             modSelect = true;
         }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        initTable();
         configUI();
+        initTable();
         if (modSelect)
-            selectAllData(factura);
+            selectAllData(pedido);
     }
 
     private void configUI() {
         btnNew.setOnAction(event -> addRow());
         btnDelete.setOnAction(event -> removeRow());
 
-        ProveedorDAO proveedorDAO = new ProveedorDAO(MySQL.getConnection());
-        cmbProveedor.setItems(proveedorDAO.selectAll());
+        CatFormaPagoDAO catFormaPagoDAO = new CatFormaPagoDAO(MySQL.getConnection());
+        TrabajadorDAO trabajadorDAO = new TrabajadorDAO(MySQL.getConnection());
 
-        cmbProveedor.valueProperty().addListener((observable, oldValue, newValue) -> selectProv(newValue));
+        cmbFormaPago.setItems(catFormaPagoDAO.selectAll());
+        cmbStatus.setItems(MyUtils.getStatusOptions());
+        cmbTrab.setItems(trabajadorDAO.selectMostrador());
 
-        btnSave.setOnAction(event -> saveFactura());
+        btnSave.setOnAction(event -> savePedido());
 
         btnAdd.setOnAction(event -> clearAndAdd());
+
+        txtIdCliente.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+            if(event.getCode() == KeyCode.F3){
+                SearchPacientController controller = new SearchPacientController(this);
+                MyUtils.openWindow(getClass().getResource("/fxml/SceneSearchPacient.fxml"), "Buscar Paciente", controller);
+            }
+        });
 
         disableFields(true);
     }
 
     private void disableFields(boolean disable) {
         btnSave.setDisable(!modSave);
-        txtFactura.setDisable(disable);
-        cmbProveedor.setDisable(disable);
+        txtNoPedido.setDisable(disable);
+        txtIdCliente.setDisable(disable);
+    }
+
+    private void editableFields(boolean editable){
+        txtObs.setEditable(editable);
+        txtIdCliente.setEditable(editable);
+        cmbStatus.setDisable(!editable);
+        cmbTrab.setDisable(!editable);
+        cmbFormaPago.setDisable(!editable);
+        dateFecha.setEditable(false);
+    }
+
+    private void clearAndAdd() {
+        tblProd.getItems().clear();
+        txtNoPedido.setText(pedidoDAO.getNextFolio() + "");
+        lblTotal.setText("$00.00");
+        lblDesc.setText("$00.00");
+        lblIva.setText("$00.00");
+        lblSub.setText("$00.00");
+        txtIdCliente.clear();
+        txtObs.clear();
+        lblDir.setText("");
+        lblName.setText("");
+        lblEmpresa.setText("");
+        dateFecha.setValue(null);
+        modSave = true;
+        cmbStatus.getSelectionModel().clearSelection();
+        cmbFormaPago.getSelectionModel().clearSelection();
+        cmbTrab.getSelectionModel().clearSelection();
+        disableFields(false);
     }
 
     /**
@@ -269,6 +320,7 @@ public class FacturaController implements Initializable, ReciveProductBase {
             removeRow();
             addRow();
         } else {
+            bean.setCosto(prod.getPrecio());
             bean.setDescripcion(prod.getDescripcion());
         }
     }
@@ -276,54 +328,6 @@ public class FacturaController implements Initializable, ReciveProductBase {
     /*
      * ***********************************************************************************************************************
      */
-
-    private void selectProv(Proveedor proveedor) {
-        if (proveedor != null) {
-            lblDir.setText(proveedor.getDomicilio());
-            lblCP.setText(proveedor.getCp());
-            lblDiasCred.setText(proveedor.getDiasCred() + "");
-            lblRFC.setText(proveedor.getRfc());
-        }
-    }
-
-    private void saveFactura() {
-        int folio = Integer.valueOf(txtFolio.getText());
-        String fact = txtFactura.getText().trim();
-        Date fechaExp = Date.valueOf(dateFech.getValue());
-        String codProd = cmbProveedor.getSelectionModel().getSelectedItem().getCodProveedor();
-
-        factura.setFolio(folio);
-        factura.setCodProv(codProd);
-        factura.setFactura(fact);
-        factura.setFechaExp(fechaExp);
-
-        if (facturaDAO.insert(factura))
-            if (facturaDAO.registerProducts(tblProd.getItems(), folio)) {
-                MyUtils.makeDialog("Compra Realizada", null,
-                        "La compra fue registrada exitosamente", Alert.AlertType.INFORMATION).show();
-                modSave = false;
-                disableFields(true);
-            }
-
-    }
-
-    private void clearAndAdd() {
-        tblProd.getItems().clear();
-        txtFolio.setText(facturaDAO.getNextFolio() + "");
-        txtFactura.setText("");
-        lblTotal.setText("$00.00");
-        lblDesc.setText("$00.00");
-        lblIva.setText("$00.00");
-        lblSub.setText("$00.00");
-        lblRFC.setText("");
-        lblCP.setText("");
-        lblDir.setText("");
-        lblDiasCred.setText("");
-        dateFech.setValue(null);
-        modSave = true;
-        cmbProveedor.getSelectionModel().clearSelection();
-        disableFields(false);
-    }
 
     private void calcularTotal() {
         double subTotal = 0, iva = 0, desc = 0, total;
@@ -337,15 +341,45 @@ public class FacturaController implements Initializable, ReciveProductBase {
         iva = subTotal * 0.16;
         total = subTotal - desc + iva;
 
-        factura.setSubtotal(subTotal);
-        factura.setDescuento(desc);
-        factura.setImpuesto(iva);
-        factura.setTotal(total);
+        pedido.setSubtotal(subTotal);
+        pedido.setDescuento(desc);
+        pedido.setImpuesto(iva);
+        pedido.setTotal(total);
 
         lblSub.setText("$" + MyUtils.formatDouble(subTotal));
         lblIva.setText("$" + MyUtils.formatDouble(iva));
         lblDesc.setText("$" + MyUtils.formatDouble(desc));
         lblTotal.setText("$" + MyUtils.formatDouble(total));
+    }
+
+    private void selectPaciente(Paciente paciente){
+        lblName.setText(paciente.getNombre());
+        EmpresaDAO empresaDAO = new EmpresaDAO(MySQL.getConnection());
+        lblEmpresa.setText(empresaDAO.selectByID(paciente.getCveEmpresa()).getNombre());
+        lblDir.setText(paciente.getDomicilio());
+    }
+
+    private void savePedido() {
+        int noPedido = Integer.valueOf(txtNoPedido.getText());
+        String status = cmbStatus.getSelectionModel().getSelectedItem();
+        Date fechaExp = Date.valueOf(dateFecha.getValue());
+        String rfcTrab = cmbTrab.getSelectionModel().getSelectedItem().getRfc();
+        int idCliente = Integer.valueOf(txtIdCliente.getText());
+
+        pedido.setNoPedido(noPedido);
+        pedido.setStatus(status);
+        pedido.setRfcTrab(rfcTrab);
+        pedido.setIdCliente(idCliente);
+        pedido.setFecha(fechaExp);
+
+        if (pedidoDAO.insert(pedido))
+            if (pedidoDAO.registerProducts(tblProd.getItems(), noPedido)) {
+                MyUtils.makeDialog("Venta Realizada", null,
+                        "La venta fue registrada exitosamente", Alert.AlertType.INFORMATION).show();
+                modSave = false;
+                disableFields(true);
+            }
+
     }
 
     @Override
@@ -354,36 +388,47 @@ public class FacturaController implements Initializable, ReciveProductBase {
         bean.setProducto(producto.getCodProd());
     }
 
-    private void selectAllData(Factura factura) {
-        ProveedorDAO proveedorDAO = new ProveedorDAO(MySQL.getConnection());
-        Proveedor proveedor = proveedorDAO.selectProvByID(factura.getCodProv());
-
-        selectProv(proveedor);
-        cmbProveedor.getSelectionModel().select(getProveedorByID(proveedor.getCodProveedor()));
-
-        txtFolio.setText(factura.getFolio() + "");
-        txtFactura.setText(factura.getFactura());
-        dateFech.setValue(factura.getFechaExp().toLocalDate());
-
-        lblSub.setText("$" + MyUtils.formatDouble(factura.getSubtotal()));
-        lblIva.setText("$" + MyUtils.formatDouble(factura.getImpuesto()));
-        lblDesc.setText("$" + MyUtils.formatDouble(factura.getDescuento()));
-        lblTotal.setText("$" + MyUtils.formatDouble(factura.getTotal()));
-
-        disableFields(false);
-        txtFactura.setEditable(false);
-        txtFolio.setEditable(false);
-        cmbProveedor.setDisable(false);
-        btnAdd.setDisable(true);
-        btnNew.setVisible(false);
-        btnDelete.setVisible(false);
-
-        tblProd.setItems(facturaDAO.selectProductByFact(factura.getFolio()));
+    @Override
+    public void recivePacient(Paciente paciente) {
+        if(paciente != null) {
+            txtIdCliente.setText(paciente.getId() + "");
+            selectPaciente(paciente);
+        }
     }
 
-    private Proveedor getProveedorByID(String cod) {
-        for (Proveedor prov : cmbProveedor.getItems())
-            if (prov.getCodProveedor().equals(cod))
+    private void selectAllData(Pedido pedido) {
+        TrabajadorDAO trabajadorDAO = new TrabajadorDAO(MySQL.getConnection());
+        PacienteDAO pacienteDAO = new PacienteDAO(MySQL.getConnection());
+        EmpresaDAO empresaDAO = new EmpresaDAO(MySQL.getConnection());
+
+        Paciente paciente = pacienteDAO.selectByID(pedido.getIdCliente()+"").get(0);
+        Trabajador trabajador = trabajadorDAO.selectByRFC(pedido.getRfcTrab());
+
+        cmbTrab.setValue(getTrabajadorByID(trabajador.getRfc()));
+        cmbStatus.setValue(pedido.getStatus());
+
+        lblSub.setText("$" + MyUtils.formatDouble(pedido.getSubtotal()));
+        lblIva.setText("$" + MyUtils.formatDouble(pedido.getImpuesto()));
+        lblDesc.setText("$" + MyUtils.formatDouble(pedido.getDescuento()));
+        lblTotal.setText("$" + MyUtils.formatDouble(pedido.getTotal()));
+
+        txtIdCliente.setText(paciente.getId()+"");
+        lblDir.setText(paciente.getDomicilio());
+        Empresa empresa = empresaDAO.selectByID(paciente.getCveEmpresa());
+        lblEmpresa.setText(empresa.getNombre());
+        dateFecha.setValue(pedido.getFecha().toLocalDate());
+        txtNoPedido.setText(pedido.getNoPedido()+"");
+
+        txtObs.setText(pedido.getObs());
+        disableFields(false);
+        editableFields(false);
+
+        tblProd.setItems(pedidoDAO.selectProductByNoPed(pedido.getNoPedido()));
+    }
+
+    private Trabajador getTrabajadorByID(String rfc) {
+        for (Trabajador prov : cmbTrab.getItems())
+            if (prov.getRfc().equals(rfc))
                 return prov;
 
         return null;
