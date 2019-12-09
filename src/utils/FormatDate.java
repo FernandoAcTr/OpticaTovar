@@ -74,11 +74,13 @@ public class FormatDate {
         return year;
     }
 
+    public String getSQLFormatDay(){
+        return  year + "/" + month + "/" + day;
+    }
+
     @Override
     public String toString(){
         return day + "/" + month + "/" + year;
     }
-    
-    
     
 }

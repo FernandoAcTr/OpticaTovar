@@ -4,6 +4,7 @@ import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import connection.MySQL;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -76,6 +77,14 @@ public class TerapiasController extends RecivePacientBase implements Initializab
                 Terapia terapia = tblTerapias.getSelectionModel().getSelectedItem();
                 if (terapia != null)
                     showDetails(terapia);
+            }
+        });
+
+        btnSearch.setOnAction(event -> {
+            if(dateDesde.getValue() != null) {
+                int id = Integer.valueOf(txtID.getText());
+                ObservableList<Terapia> list = teraDAO.selectByDate(id, Date.valueOf(dateDesde.getValue()));
+                tblTerapias.setItems(list);
             }
         });
     }

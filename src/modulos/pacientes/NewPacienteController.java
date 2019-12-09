@@ -200,7 +200,7 @@ public class NewPacienteController implements Initializable {
         cmbGenero.getSelectionModel().select(pac.getGenero());
         txtCorreo.setText(pac.getEmail());
         txtOcup.setText(pac.getOcupacion());
-        dateFechaNac.getEditor().setText(pac.getFechaNac().toString());
+        dateFechaNac.getEditor().setText(new FormatDate(pac.getFechaNac()).toString());
         txtEdad.setText(pac.getEdad() + "");
         cmbEmpresa.getSelectionModel().select(getIndexOfEmpresa(pac.getCveEmpresa()));
     }
