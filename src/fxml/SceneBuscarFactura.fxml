@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="modulos.facturas.ConsultaFacturaController">
+    <children>
+        <GridPane prefWidth="550.0" vgap="10.0">
+            <columnConstraints>
+                <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="548.0" minWidth="10.0" prefWidth="492.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="325.0" minWidth="10.0" prefWidth="142.0" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            </rowConstraints>
+            <children>
+                <JFXButton fx:id="btnSearch" minHeight="-Infinity" minWidth="-Infinity" prefHeight="32.0" prefWidth="79.0" text="Buscar" GridPane.columnIndex="1" GridPane.halignment="LEFT" GridPane.rowIndex="1" GridPane.valignment="BASELINE" />
+                <JFXComboBox fx:id="cmbProv" labelFloat="true" minWidth="200.0" promptText="PROVEEDOR" GridPane.rowIndex="1" />
+                <JFXTextField fx:id="txtFolio" labelFloat="true" promptText="FOLIO" />
+            </children>
+            <VBox.margin>
+                <Insets left="10.0" top="10.0" />
+            </VBox.margin>
+        </GridPane>
+        <TableView fx:id="tblFacts">
+            <VBox.margin>
+                <Insets top="15.0" />
+            </VBox.margin>
+            <columns>
+                <TableColumn fx:id="colFolio" editable="false" prefWidth="100.0" text="Folio" />
+                <TableColumn fx:id="colName" editable="false" prefWidth="300.0" text="Proveedor" />
+                <TableColumn fx:id="colFecha" editable="false" prefWidth="150.0" text="Fecha" />
+            </columns>
+        </TableView>
+    </children>
+</VBox>

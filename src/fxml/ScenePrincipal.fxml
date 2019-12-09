@@ -27,23 +27,29 @@
                         </Menu>
                         <Menu mnemonicParsing="false" styleClass="menu" text="Modulos">
                             <items>
-                                <Menu mnemonicParsing="false" text="Catalogos">
-                                    <items>
-                                        <MenuItem fx:id="mnuTypeMate" mnemonicParsing="false" text="Tipo de Material" />
-                                        <MenuItem fx:id="mnuPayForm" mnemonicParsing="false" text="Formas de Pago" />
-                                        <MenuItem fx:id="mnuMarca" mnemonicParsing="false" text="Marcas" />
-                                        <MenuItem fx:id="mnuTypeProd" mnemonicParsing="false" text="Tipos de Producto" />
-                                        <MenuItem fx:id="mnuTypeReview" mnemonicParsing="false" text="Tipos de Consulta" />
-                                        <MenuItem fx:id="mnuTypeJob" mnemonicParsing="false" text="Puestos" />
-                                        <MenuItem fx:id="mnuTypeLDC" mnemonicParsing="false" text="Tipos LDC" />
-                                    </items>
-                                </Menu>
                                 <MenuItem fx:id="mnuEmpresas" text="Empresas" />
                                 <MenuItem fx:id="mnuProveedores" text="Proveedores" />
                                 <MenuItem fx:id="mnuTrabajadores" text="Trabajadores" />
                                 <MenuItem fx:id="mnuLabs" text="Laboratorios" />
+                        <Menu mnemonicParsing="false" text="Compras">
+                          <items>
+                            <MenuItem fx:id="mnuCompra" mnemonicParsing="false" text="Altas" />
+                              <MenuItem fx:id="mnuConsultaCompra" mnemonicParsing="false" text="Consultar" />
+                          </items>
+                        </Menu>
                             </items>
                         </Menu>
+                          <Menu mnemonicParsing="false" text="Catalogos">
+                              <items>
+                                  <MenuItem fx:id="mnuTypeMate" mnemonicParsing="false" text="Tipo de Material" />
+                                  <MenuItem fx:id="mnuPayForm" mnemonicParsing="false" text="Formas de Pago" />
+                                  <MenuItem fx:id="mnuMarca" mnemonicParsing="false" text="Marcas" />
+                                  <MenuItem fx:id="mnuTypeProd" mnemonicParsing="false" text="Tipos de Producto" />
+                                  <MenuItem fx:id="mnuTypeReview" mnemonicParsing="false" text="Tipos de Consulta" />
+                                  <MenuItem fx:id="mnuTypeJob" mnemonicParsing="false" text="Puestos" />
+                                  <MenuItem fx:id="mnuTypeLDC" mnemonicParsing="false" text="Tipos LDC" />
+                              </items>
+                          </Menu>
                         <Menu mnemonicParsing="false" styleClass="menu" text="Acerca de...">
                             <items>
                                 <MenuItem mnemonicParsing="false" styleClass="menuitem" text="About" />

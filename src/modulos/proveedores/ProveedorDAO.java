@@ -117,6 +117,32 @@ public class ProveedorDAO implements BasicDAO {
 
     public ObservableList<Proveedor> selectAll() {
         String query = "SELECT * FROM Proveedor";
+        return select(query);
+    }
+
+    public Proveedor selectProvByID(String codProv){
+        String query = "SELECT * FROM Proveedor " +
+                " WHERE codProveedor = '" + codProv + "'";
+        return select(query).get(0);
+    }
+
+    public boolean delete(Object bean) {
+        Proveedor prov = (Proveedor) bean;
+
+        String query = "DELETE FROM Proveedor WHERE codProveedor = '" + prov.getCodProveedor() + "'";
+        boolean success = false;
+        try {
+            Statement st = connection.createStatement();
+            success = !st.execute(query);
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return success;
+    }
+
+    public ObservableList<Proveedor> select(String query) {
         ObservableList<Proveedor> listProveedores = FXCollections.observableArrayList();
         try {
             Statement st = connection.createStatement();
@@ -151,23 +177,6 @@ public class ProveedorDAO implements BasicDAO {
         }
 
         return listProveedores;
-    }
-
-
-    public boolean delete(Object bean) {
-        Proveedor prov = (Proveedor) bean;
-
-        String query = "DELETE FROM Proveedor WHERE codProveedor = '" + prov.getCodProveedor() + "'";
-        boolean success = false;
-        try {
-            Statement st = connection.createStatement();
-            success = !st.execute(query);
-            st.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return success;
     }
 
 }

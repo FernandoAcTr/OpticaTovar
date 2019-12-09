@@ -128,7 +128,7 @@ public class ProductDAO implements BasicDAO {
         return success;
     }
 
-    private ObservableList<Producto> select(String query) {
+    public ObservableList<Producto> select(String query) {
 
         ObservableList<Producto> listProducts = FXCollections.observableArrayList();
         try {

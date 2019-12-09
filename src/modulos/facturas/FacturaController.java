@@ -97,11 +97,21 @@ public class FacturaController extends ReciveProductBase implements Initializabl
 
     Factura factura = new Factura();
     boolean modSave = false;
+    boolean modSelect = false;
+
+    public FacturaController(Factura factura) {
+        if (factura != null) {
+            this.factura = factura;
+            modSelect = true;
+        }
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initTable();
         configUI();
+        if (modSelect)
+            selectAllData(factura);
     }
 
     private void configUI() {
@@ -342,5 +352,40 @@ public class FacturaController extends ReciveProductBase implements Initializabl
     public void reciveProduct(Producto producto) {
         TableBean bean = tblProd.getSelectionModel().getSelectedItem();
         bean.setProducto(producto.getCodProd());
+    }
+
+    private void selectAllData(Factura factura) {
+        ProveedorDAO proveedorDAO = new ProveedorDAO(MySQL.getConnection());
+        Proveedor proveedor = proveedorDAO.selectProvByID(factura.getCodProv());
+
+        selectProv(proveedor);
+        cmbProveedor.getSelectionModel().select(getProveedorByID(proveedor.getCodProveedor()));
+
+        txtFolio.setText(factura.getFolio() + "");
+        txtFactura.setText(factura.getFactura());
+        dateFech.setValue(factura.getFechaExp().toLocalDate());
+
+        lblSub.setText("$" + MyUtils.formatDouble(factura.getSubtotal()));
+        lblIva.setText("$" + MyUtils.formatDouble(factura.getImpuesto()));
+        lblDesc.setText("$" + MyUtils.formatDouble(factura.getDescuento()));
+        lblTotal.setText("$" + MyUtils.formatDouble(factura.getTotal()));
+
+        disableFields(false);
+        txtFactura.setEditable(false);
+        txtFolio.setEditable(false);
+        cmbProveedor.setDisable(false);
+        btnAdd.setDisable(true);
+        btnNew.setVisible(false);
+        btnDelete.setVisible(false);
+
+        tblProd.setItems(facturaDAO.selectProductByFact(factura.getFolio()));
+    }
+
+    private Proveedor getProveedorByID(String cod) {
+        for (Proveedor prov : cmbProveedor.getItems())
+            if (prov.getCodProveedor().equals(cod))
+                return prov;
+
+        return null;
     }
 }

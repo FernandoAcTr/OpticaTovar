@@ -8,6 +8,7 @@ public class Factura {
     private Date fechaExp;
     private double subtotal, descuento, impuesto, total;
     private String codProv;
+    private String nombreProv;
 
     public Factura() {
     }
@@ -22,6 +23,19 @@ public class Factura {
         this.impuesto = impuesto;
         this.total = total;
         this.codProv = codProv;
+    }
+
+    public Factura(int folio, String factura, Date fechaExp, double subtotal, double descuento, double impuesto,
+                   double total, String codProv, String nombreProv) {
+        this.folio = folio;
+        this.factura = factura;
+        this.fechaExp = fechaExp;
+        this.subtotal = subtotal;
+        this.descuento = descuento;
+        this.impuesto = impuesto;
+        this.total = total;
+        this.codProv = codProv;
+        this.nombreProv = nombreProv;
     }
 
     public int getFolio() {
@@ -86,5 +100,13 @@ public class Factura {
 
     public void setCodProv(String codProv) {
         this.codProv = codProv;
+    }
+
+    public String getNombreProv() {
+        return nombreProv;
+    }
+
+    public void setNombreProv(String nombreProv) {
+        this.nombreProv = nombreProv;
     }
 }

@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
+import modulos.facturas.FacturaController;
 import utils.MyUtils;
 
 import java.io.IOException;
@@ -41,7 +42,7 @@ public class PrincipalController implements Initializable {
     private MenuItem mnuTypeLDC;
 
     @FXML
-    private MenuItem mnuClose, mnuEmpresas, mnuProveedores, mnuTrabajadores, mnuLabs;
+    private MenuItem mnuClose, mnuEmpresas, mnuProveedores, mnuTrabajadores, mnuLabs, mnuCompra, mnuConsultaCompra;
 
     @FXML
     private JFXButton btnPacientes, btnTerapias, btnProveedores, btnAlmacen, btnCompras;
@@ -66,11 +67,15 @@ public class PrincipalController implements Initializable {
         mnuProveedores.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneProveedor.fxml"), "Proveedores"));
         mnuTrabajadores.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneTrabajador.fxml"), "Trabajadores"));
         mnuLabs.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneLaboratorio.fxml"), "Laboratorios"));
+        mnuConsultaCompra.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneBuscarFactura.fxml"), "Compras"));
+
+        FacturaController controller = new FacturaController(null);
+        mnuCompra.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneFactura.fxml"), "Compras", controller));
+        btnCompras.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneFactura.fxml"), "Compras", controller));
 
         btnTerapias.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneTerapias.fxml"), "Terapias"));
         btnProveedores.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneProveedor.fxml"), "Proveedores"));
         btnAlmacen.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneProductos.fxml"), "Almacen"));
-        btnCompras.setOnAction(event -> MyUtils.openWindow(getClass().getResource("/fxml/SceneFactura.fxml"), "Compras"));
 
         mnuClose.setOnAction(event -> {
             MySQL.Disconnect();
