@@ -41,7 +41,7 @@ public class TerapiaDAO implements BasicDAO {
     }
 
     @Override
-    public ObservableList selectAll() {
+    public ObservableList<Terapia> selectAll() {
         String query = "SELECT * FROM Terapia";
         ObservableList<Terapia> listTeras = FXCollections.observableArrayList();
         try {
@@ -83,5 +83,29 @@ public class TerapiaDAO implements BasicDAO {
         }
 
         return success;
+    }
+
+    private ObservableList<Terapia> select(String query) {
+        ObservableList<Terapia> listTeras = FXCollections.observableArrayList();
+        try {
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(query);
+
+            while (rs.next()) {
+                int idCliente = rs.getInt(1);
+                Date fecha = rs.getDate(2);
+                Time hora = rs.getTime(3);
+                String rfc = rs.getString(4);
+
+                listTeras.add(new Terapia(idCliente, fecha, hora, rfc));
+            }
+
+            rs.close();
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return listTeras;
     }
 }

@@ -10,7 +10,9 @@ public class TableBean {
     private StringProperty descripcion;
     private DoubleProperty costo;
     private IntegerProperty descuento;
-    private DoubleProperty total;
+    private DoubleProperty subTotal;
+
+    private double totalDescuento;
 
     public TableBean() {
         producto = new SimpleStringProperty();
@@ -18,7 +20,7 @@ public class TableBean {
         descripcion = new SimpleStringProperty();
         costo = new SimpleDoubleProperty();
         descuento = new SimpleIntegerProperty();
-        total = new SimpleDoubleProperty();
+        subTotal = new SimpleDoubleProperty();
     }
 
     public TableBean(String producto, int cantidad, String descripcion, double costo, int descuento) {
@@ -30,7 +32,7 @@ public class TableBean {
 
         double total = (costo - (costo * descuento /100)) * cantidad;
         
-        this.total = new SimpleDoubleProperty(total);
+        this.subTotal = new SimpleDoubleProperty(total);
     }
 
     public String getProducto() {
@@ -55,7 +57,7 @@ public class TableBean {
 
     public void setCantidad(int cantidad) {
         this.cantidad.set(cantidad);
-        setTotal();
+        setSubtotal();
     }
 
     public String getDescripcion() {
@@ -80,7 +82,7 @@ public class TableBean {
 
     public void setCosto(double costo) {
         this.costo.set(costo);
-        setTotal();
+        setSubtotal();
     }
 
     public int getDescuento() {
@@ -93,20 +95,28 @@ public class TableBean {
 
     public void setDescuento(int descuento) {
         this.descuento.set(descuento);
-        setTotal();
+        setTotalDescuento();
     }
 
-    public double getTotal() {
-        return total.get();
+    public double getSubTotal() {
+        return subTotal.get();
     }
 
-    public DoubleProperty totalProperty() {
-        return total;
+    public DoubleProperty subTotalProperty() {
+        return subTotal;
     }
 
-    public void setTotal() {
-        double total = (costo.get() - (costo.get() * descuento.get() /100)) * cantidad.get();
-        this.total.set(total);
+    private void setSubtotal() {
+        double subTotal = costo.get() * cantidad.get();
+        this.subTotal.set(subTotal);
+    }
+
+    public double getTotalDescuento() {
+        return totalDescuento;
+    }
+
+    public void setTotalDescuento() {
+        this.totalDescuento = costo.get() * cantidad.get() * descuento.get() /100;
     }
 
     public static ObservableList<TableBean> getDummyProductos(){

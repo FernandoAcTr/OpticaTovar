@@ -121,4 +121,9 @@ public class MyUtils {
         alert.setContentText(content);
         return alert;
     }
+
+    public static String formatDouble(double number){
+        DecimalFormat formatter = new DecimalFormat("00.00");
+        return formatter.format(number);
+    }
 }

@@ -167,4 +167,9 @@ public class Proveedor {
     public void setDiasCred(int diasCred) {
         this.diasCred = diasCred;
     }
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
 }

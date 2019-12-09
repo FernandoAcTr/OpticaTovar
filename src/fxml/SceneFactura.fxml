@@ -63,18 +63,18 @@
                 <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
             </VBox.margin>
             <children>
-                <JFXComboBox focusTraversable="false" minWidth="200.0" promptText="PROVEEDOR" GridPane.columnSpan="2" />
+                <JFXComboBox fx:id="cmbProveedor" focusTraversable="false" minWidth="200.0" promptText="PROVEEDOR" GridPane.columnSpan="2" />
                 <Label text="Direccion:" GridPane.rowIndex="1" />
                 <Label text="CP:" GridPane.rowIndex="2" />
                 <Label text="RFC:" GridPane.rowIndex="3" />
-                <Label fx:id="lblDir" text="label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                <Label fx:id="lblCP" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <Label fx:id="lblRFC" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                <Label text="Credito" GridPane.rowIndex="4" />
-                <Label fx:id="ldlDiasCred" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <Label fx:id="lblDir" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label fx:id="lblCP" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Label fx:id="lblRFC" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <Label text="Credito:" GridPane.rowIndex="4" />
+                <Label fx:id="lblDiasCred" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                 <JFXTextField fx:id="txtFolio" editable="false" focusTraversable="false" labelFloat="true" promptText="FOLIO" GridPane.columnIndex="2" />
-                <JFXTextField focusTraversable="false" labelFloat="true" promptText="FACTURA" GridPane.columnIndex="3" GridPane.valignment="BOTTOM" />
-                <JFXDatePicker focusTraversable="false" minWidth="150.0" promptText="FECHA" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                <JFXTextField fx:id="txtFactura" focusTraversable="false" labelFloat="true" promptText="FACTURA" GridPane.columnIndex="3" GridPane.valignment="BOTTOM" />
+                <JFXDatePicker fx:id="dateFech" focusTraversable="false" minWidth="150.0" promptText="FECHA" GridPane.columnIndex="3" GridPane.rowIndex="1" />
             </children>
         </GridPane>
         <TableView fx:id="tblProd" editable="true" prefHeight="250.0">
@@ -84,7 +84,7 @@
                 <TableColumn fx:id="colDescrip" prefWidth="300.0" sortable="false" text="Descripción" />
                 <TableColumn fx:id="colCosto" prefWidth="100.0" sortable="false" text="Costo Unit." />
                 <TableColumn fx:id="colDescuento" prefWidth="110.0" sortable="false" text="Descuento %" />
-                <TableColumn fx:id="colTotal" editable="false" prefWidth="100.0" sortable="false" text="Total" />
+                <TableColumn fx:id="colTotal" editable="false" prefWidth="100.0" sortable="false" text="Subtotal" />
             </columns>
         </TableView>
         <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="200.0">
@@ -105,18 +105,24 @@
                         <Label text="DESCUENTO" GridPane.rowIndex="1" />
                         <Label text="I.V.A." GridPane.rowIndex="2" />
                         <Label text="TOTAL" GridPane.rowIndex="3" />
-                        <Label fx:id="ibiSub" text="\$0.00" GridPane.columnIndex="1" />
+                        <Label fx:id="lblSub" text="\$0.00" GridPane.columnIndex="1" />
                         <Label fx:id="lblDesc" text="\$0.00" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label fx:id="lblIva" text="\$0.00" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <Label fx:id="lblTotal" text="\$0.00" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                     </children>
                 </GridPane>
             </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <padding>
+            <Insets right="10.0" />
+         </padding>
         </HBox>
         <HBox alignment="CENTER" prefHeight="50.0">
             <children>
                 <JFXButton fx:id="btnAdd" focusTraversable="false" text="ALTAS" />
-                <JFXButton fx:id="btnRegistrar" focusTraversable="false" text="GUARDAR" />
+                <JFXButton fx:id="btnSave" focusTraversable="false" text="GUARDAR" />
             </children>
         </HBox>
     </children>

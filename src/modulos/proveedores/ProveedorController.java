@@ -142,6 +142,7 @@ public class ProveedorController implements Initializable {
 
         MyUtils.stablishTextFiedlLimit(txtCodigo, 4);
         MyUtils.stablishTextFiedlLimit(txtRFC, 13);
+        MyUtils.stablishTextFiedlLimit(txtCP, 5);
 
         MyUtils.stablishNumericRestriction(txtDescuento);
         MyUtils.stablishNumericRestriction(txtDiasCred);

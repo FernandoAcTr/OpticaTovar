@@ -154,6 +154,7 @@ public class ProductController implements Initializable {
         txtLinea.setText("");
         txtColor.setText("");
         txtDescripcion.setText("");
+        txtStock.setText("");
         cmbGenero.getSelectionModel().clearSelection();
         cmbTipo.getSelectionModel().clearSelection();
         cmbMarca.getSelectionModel().clearSelection();

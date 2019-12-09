@@ -77,7 +77,7 @@
                 <JFXTextField fx:id="txtCP" labelFloat="true" promptText="CODIGO POSTAL" unFocusColor="#bf2eba" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                 <JFXComboBox fx:id="cmbGenero" minWidth="200.0" promptText="GENERO" GridPane.rowIndex="7" />
                 <JFXTextField fx:id="txtOcup" labelFloat="true" promptText="OCUPACION" unFocusColor="#bf2eba" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                <JFXDatePicker fx:id="dateFechaNac" defaultColor="#bf2eba" editable="false" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                <JFXDatePicker fx:id="dateFechaNac" defaultColor="#bf2eba" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                 <JFXTextField fx:id="txtEdad" labelFloat="true" promptText="EDAD" unFocusColor="#bf2eba" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                 <JFXTextField fx:id="txtTelefono" labelFloat="true" promptText="TELEFONO" unFocusColor="#bf2eba" GridPane.rowIndex="10" />
                 <JFXTextField fx:id="txtCorreo" labelFloat="true" promptText="EMAIL" unFocusColor="#bf2eba" GridPane.columnIndex="1" GridPane.rowIndex="10" />

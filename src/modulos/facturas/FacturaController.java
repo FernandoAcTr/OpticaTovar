@@ -1,23 +1,30 @@
 package modulos.facturas;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
+import connection.MySQL;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import modulos.productos.ProductDAO;
+import modulos.productos.Producto;
+import modulos.productos.ReciveProductBase;
+import modulos.productos.SearchProductController;
+import modulos.proveedores.Proveedor;
+import modulos.proveedores.ProveedorDAO;
+import utils.MyUtils;
 
 import java.net.URL;
-import java.text.DecimalFormat;
+import java.sql.Date;
 import java.util.ResourceBundle;
 
-public class FacturaController implements Initializable {
+public class FacturaController extends ReciveProductBase implements Initializable {
 
     @FXML
     private JFXButton btnNew;
@@ -35,10 +42,10 @@ public class FacturaController implements Initializable {
     private Label lblRFC;
 
     @FXML
-    private Label ldlDiasCred;
+    private Label lblDiasCred;
 
     @FXML
-    private JFXTextField txtFolio;
+    private JFXTextField txtFolio, txtFactura;
 
     @FXML
     private TableView<TableBean> tblProd;
@@ -62,7 +69,10 @@ public class FacturaController implements Initializable {
     private TableColumn<TableBean, Number> colTotal;
 
     @FXML
-    private Label ibiSub;
+    private JFXComboBox<Proveedor> cmbProveedor;
+
+    @FXML
+    private Label lblSub;
 
     @FXML
     private Label lblDesc;
@@ -77,13 +87,49 @@ public class FacturaController implements Initializable {
     private JFXButton btnAdd;
 
     @FXML
-    private JFXButton btnRegistrar;
+    private JFXButton btnSave;
+
+    @FXML
+    private JFXDatePicker dateFech;
+
+    FacturaDAO facturaDAO = new FacturaDAO(MySQL.getConnection());
+    ProductDAO productDAO = new ProductDAO(MySQL.getConnection());
+
+    Factura factura = new Factura();
+    boolean modSave = false;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         initTable();
         configUI();
     }
+
+    private void configUI() {
+        btnNew.setOnAction(event -> addRow());
+        btnDelete.setOnAction(event -> removeRow());
+
+        ProveedorDAO proveedorDAO = new ProveedorDAO(MySQL.getConnection());
+        cmbProveedor.setItems(proveedorDAO.selectAll());
+
+        cmbProveedor.valueProperty().addListener((observable, oldValue, newValue) -> selectProv(newValue));
+
+        btnSave.setOnAction(event -> saveFactura());
+
+        btnAdd.setOnAction(event -> clearAndAdd());
+
+        disableFields(true);
+    }
+
+    private void disableFields(boolean disable) {
+        btnSave.setDisable(!modSave);
+        txtFactura.setDisable(disable);
+        cmbProveedor.setDisable(disable);
+    }
+
+    /**
+     * *******************************Metodos para configuracion de TableView *******************************
+     * ********************************************************************************************************
+     */
 
     private void initTable() {
         tblProd.getSelectionModel().setCellSelectionEnabled(true);
@@ -93,7 +139,7 @@ public class FacturaController implements Initializable {
         colCosto.setCellValueFactory(param -> param.getValue().costoProperty());
         colDescrip.setCellValueFactory(param -> param.getValue().descripcionProperty());
         colDescuento.setCellValueFactory(param -> param.getValue().descuentoProperty());
-        colTotal.setCellValueFactory(param -> param.getValue().totalProperty());
+        colTotal.setCellValueFactory(param -> param.getValue().subTotalProperty());
 
         colProd.setCellFactory(TextFieldTableCell.forTableColumn());
         colQuantity.setCellFactory(createNumberCellFactory());
@@ -104,16 +150,19 @@ public class FacturaController implements Initializable {
         colProd.setOnEditCommit(data -> {
             TableBean bean = data.getRowValue();
             bean.setProducto(data.getNewValue());
+            onCommitProduct(bean);
         });
 
         colQuantity.setOnEditCommit(data -> {
             TableBean bean = data.getRowValue();
             bean.setCantidad(data.getNewValue().intValue());
+            calcularTotal();
         });
 
         colCosto.setOnEditCommit(data -> {
             TableBean bean = data.getRowValue();
             bean.setCosto(data.getNewValue().doubleValue());
+            calcularTotal();
         });
 
         colDescrip.setOnEditCommit(data -> {
@@ -124,6 +173,7 @@ public class FacturaController implements Initializable {
         colDescuento.setOnEditCommit(data -> {
             TableBean bean = data.getRowValue();
             bean.setDescuento(data.getNewValue().intValue());
+            calcularTotal();
         });
 
         tblProd.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
@@ -142,17 +192,16 @@ public class FacturaController implements Initializable {
             switch (event.getCode()) {
                 case TAB:
                     tblProd.getFocusModel().focusRightCell();
+                    break;
                 case F3:
-                    System.out.println("has Presionado F3");
+                    TablePosition pos = tblProd.getFocusModel().getFocusedCell();
+                    if (pos.getColumn() == 0) {
+                        SearchProductController controller = new SearchProductController(this);
+                        MyUtils.openWindow(getClass().getResource("/fxml/SceneSearchProduct.fxml"),
+                                "Buscar Producto", controller);
+                    }
             }
         });
-
-        tblProd.setItems(TableBean.getDummyProductos());
-    }
-
-    private void configUI() {
-        btnNew.setOnAction(event -> addRow());
-        btnDelete.setOnAction(event -> remove());
     }
 
     /**
@@ -197,8 +246,101 @@ public class FacturaController implements Initializable {
         tblProd.scrollTo(data);
     }
 
-    private void remove() {
+    private void removeRow() {
         tblProd.getItems().remove(tblProd.getSelectionModel().getSelectedItem());
         tblProd.getSelectionModel().clearSelection();
+    }
+
+    private void onCommitProduct(TableBean bean) {
+        Producto prod = productDAO.selectProductByID(bean.getProducto());
+        if (prod == null) {
+            MyUtils.makeDialog("Producto NO EXISTENTE", "",
+                    "El producto no existe en almacen", Alert.AlertType.WARNING).show();
+            removeRow();
+            addRow();
+        } else {
+            bean.setDescripcion(prod.getDescripcion());
+        }
+    }
+
+    /*
+     * ***********************************************************************************************************************
+     */
+
+    private void selectProv(Proveedor proveedor) {
+        if (proveedor != null) {
+            lblDir.setText(proveedor.getDomicilio());
+            lblCP.setText(proveedor.getCp());
+            lblDiasCred.setText(proveedor.getDiasCred() + "");
+            lblRFC.setText(proveedor.getRfc());
+        }
+    }
+
+    private void saveFactura() {
+        int folio = Integer.valueOf(txtFolio.getText());
+        String fact = txtFactura.getText().trim();
+        Date fechaExp = Date.valueOf(dateFech.getValue());
+        String codProd = cmbProveedor.getSelectionModel().getSelectedItem().getCodProveedor();
+
+        factura.setFolio(folio);
+        factura.setCodProv(codProd);
+        factura.setFactura(fact);
+        factura.setFechaExp(fechaExp);
+
+        if (facturaDAO.insert(factura))
+            if (facturaDAO.registerProducts(tblProd.getItems(), folio)) {
+                MyUtils.makeDialog("Compra Realizada", null,
+                        "La compra fue registrada exitosamente", Alert.AlertType.INFORMATION).show();
+                modSave = false;
+                disableFields(true);
+            }
+
+    }
+
+    private void clearAndAdd() {
+        tblProd.getItems().clear();
+        txtFolio.setText(facturaDAO.getNextFolio() + "");
+        txtFactura.setText("");
+        lblTotal.setText("$00.00");
+        lblDesc.setText("$00.00");
+        lblIva.setText("$00.00");
+        lblSub.setText("$00.00");
+        lblRFC.setText("");
+        lblCP.setText("");
+        lblDir.setText("");
+        lblDiasCred.setText("");
+        dateFech.setValue(null);
+        modSave = true;
+        cmbProveedor.getSelectionModel().clearSelection();
+        disableFields(false);
+    }
+
+    private void calcularTotal() {
+        double subTotal = 0, iva = 0, desc = 0, total;
+
+        for (TableBean bean : tblProd.getItems()) {
+            subTotal += bean.getSubTotal();
+            bean.setTotalDescuento();
+            desc += bean.getTotalDescuento();
+        }
+
+        iva = subTotal * 0.16;
+        total = subTotal - desc + iva;
+
+        factura.setSubtotal(subTotal);
+        factura.setDescuento(desc);
+        factura.setImpuesto(iva);
+        factura.setTotal(total);
+
+        lblSub.setText("$" + MyUtils.formatDouble(subTotal));
+        lblIva.setText("$" + MyUtils.formatDouble(iva));
+        lblDesc.setText("$" + MyUtils.formatDouble(desc));
+        lblTotal.setText("$" + MyUtils.formatDouble(total));
+    }
+
+    @Override
+    public void reciveProduct(Producto producto) {
+        TableBean bean = tblProd.getSelectionModel().getSelectedItem();
+        bean.setProducto(producto.getCodProd());
     }
 }

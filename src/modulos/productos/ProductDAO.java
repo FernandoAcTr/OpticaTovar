@@ -47,7 +47,6 @@ public class ProductDAO implements BasicDAO {
         String query = "update Producto" +
                 " set precio = ?, " +
                 " linea = ?," +
-                " stock = ?," +
                 " color = ?," +
                 " descripcion = ?," +
                 " genero = ?," +
@@ -61,12 +60,11 @@ public class ProductDAO implements BasicDAO {
 
             ps.setDouble(1, prod.getPrecio());
             ps.setString(2, prod.getLinea());
-            ps.setInt(3, prod.getStock());
-            ps.setString(4, prod.getColor());
-            ps.setString(5, prod.getDescripcion());
-            ps.setString(6, prod.getGenero());
-            ps.setString(7, prod.getCveMarca());
-            ps.setString(8, prod.getCveTipo());
+            ps.setString(3, prod.getColor());
+            ps.setString(4, prod.getDescripcion());
+            ps.setString(5, prod.getGenero());
+            ps.setString(6, prod.getCveMarca());
+            ps.setString(7, prod.getCveTipo());
 
             success = !ps.execute();
             ps.close();
@@ -80,6 +78,58 @@ public class ProductDAO implements BasicDAO {
     @Override
     public ObservableList<Producto> selectAll() {
         String query = "SELECT * FROM Producto";
+        return select(query);
+    }
+
+    public Producto selectProductByID(String codProd) {
+        String query = "SELECT * FROM Producto" +
+                " WHERE codProd = '" + codProd + "'";
+
+        ObservableList<Producto> products = select(query);
+
+        if (products.size() == 0)
+            return null;
+        else
+            return products.get(0);
+    }
+
+    public ObservableList<Producto> selectProductByType(String cveType) {
+        String query = "SELECT * FROM Producto" +
+                " WHERE cveTipo = '" + cveType + "'";
+        return select(query);
+    }
+
+    public ObservableList<Producto> selectProductByMarca(String cveMarca) {
+        String query = "SELECT * FROM Producto" +
+                " WHERE cveMarca = '" + cveMarca + "'";
+        return select(query);
+    }
+
+    public ObservableList<Producto> selectProductByDescription(String description) {
+        String query = "SELECT * FROM Producto" +
+                " WHERE descripcion like '%" + description + "%'";
+        return select(query);
+    }
+
+    @Override
+    public boolean delete(Object bean) {
+        Producto prod = (Producto) bean;
+
+        String query = "DELETE FROM Producto WHERE codProd = '" + prod.getCodProd() + "'";
+        boolean success = false;
+        try {
+            Statement st = connection.createStatement();
+            success = !st.execute(query);
+            st.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return success;
+    }
+
+    private ObservableList<Producto> select(String query) {
+
         ObservableList<Producto> listProducts = FXCollections.observableArrayList();
         try {
             Statement st = connection.createStatement();
@@ -108,16 +158,19 @@ public class ProductDAO implements BasicDAO {
         return listProducts;
     }
 
-    @Override
-    public boolean delete(Object bean) {
-        Producto prod = (Producto) bean;
+    public boolean updateStock(String codProd, int stockIncrement) {
 
-        String query = "DELETE FROM Producto WHERE codProd = '" + prod.getCodProd() + "'";
+        String query = "update Producto " +
+                " set stock = stock + ?" +
+                " where codProd = ?";
         boolean success = false;
+
         try {
-            Statement st = connection.createStatement();
-            success = !st.execute(query);
-            st.close();
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, stockIncrement);
+            ps.setString(2, codProd);
+            success = !ps.execute();
+            ps.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
